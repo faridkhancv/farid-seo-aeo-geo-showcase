@@ -1,459 +1,215 @@
-<!DOCTYPE html>
-<html lang="ur-Latn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEO Audit Log — 125 Issues Resolved</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0E1113;
-    --panel:#171B1E;
-    --panel2:#1D2226;
-    --border:#262B2F;
-    --border-soft:#1F2427;
-    --text:#ECE9E1;
-    --text-dim:#9BA0A6;
-    --text-faint:#5C6266;
-
-    --c-meta:#E8B23D;
-    --c-heading:#4FB8A6;
-    --c-content:#E2673F;
-    --c-linking:#6C8CE8;
-    --c-media:#C77DE0;
-    --c-url:#7FCB5B;
-    --c-schema:#E85B8A;
-  }
-
-  *{box-sizing:border-box; margin:0; padding:0;}
-
-  html{scroll-behavior:smooth;}
-
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:80px;
-  }
-
-  ::selection{ background:#3a3f2a; color:#fff; }
-
-  a{color:inherit;}
-
-  .noise{
-    position:fixed; inset:0; pointer-events:none; opacity:.035; z-index:0;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* ---------- HERO ---------- */
-  header.hero{
-    position:relative;
-    padding:64px 24px 40px;
-    max-width:1180px;
-    margin:0 auto;
-    border-bottom:1px solid var(--border);
-  }
-
-  .eyebrow{
-    font-family:'JetBrains Mono', monospace;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--text-faint);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:22px;
-  }
-  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:#7FCB5B; box-shadow:0 0 8px #7FCB5B;}
-
-  h1.title{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:clamp(34px, 5.2vw, 62px);
-    letter-spacing:-0.02em;
-    line-height:1.04;
-    max-width:820px;
-  }
-
-  .title .accent{
-    background:linear-gradient(90deg, var(--c-content), var(--c-schema));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-
-  p.subtitle{
-    margin-top:18px;
-    max-width:640px;
-    color:var(--text-dim);
-    font-size:16px;
-  }
-  p.subtitle b{ color:var(--text); font-weight:600; }
-
-  /* stat strip */
-  .stat-strip{
-    display:flex;
-    gap:0;
-    margin-top:40px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    overflow:hidden;
-    flex-wrap:wrap;
-  }
-  .stat{
-    flex:1 1 140px;
-    padding:18px 20px;
-    border-right:1px solid var(--border);
-    background:var(--panel);
-  }
-  .stat:last-child{border-right:none;}
-  .stat .num{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:26px;
-  }
-  .stat .lbl{
-    font-family:'JetBrains Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:var(--text-faint);
-    margin-top:4px;
-  }
-
-  /* ---------- CONTROLS ---------- */
-  .controls{
-    position:sticky;
-    top:0;
-    z-index:20;
-    backdrop-filter:blur(14px);
-    background:rgba(14,17,19,0.86);
-    border-bottom:1px solid var(--border);
-    padding:16px 24px;
-  }
-  .controls-inner{
-    max-width:1180px;
-    margin:0 auto;
-    display:flex;
-    gap:14px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
-
-  #search{
-    flex:1 1 220px;
-    background:var(--panel);
-    border:1px solid var(--border);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    font-size:14px;
-    padding:11px 14px 11px 38px;
-    border-radius:8px;
-    outline:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239BA0A6' stroke-width='1.6'%3E%3Ccircle cx='6.7' cy='6.7' r='5'/%3E%3Cline x1='10.5' y1='10.5' x2='15' y2='15'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;
-    background-position:12px center;
-    transition:border-color .15s;
-  }
-  #search:focus{ border-color:var(--text-faint); }
-  #search::placeholder{ color:var(--text-faint); }
-
-  .chips{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-  }
-  .chip{
-    font-family:'JetBrains Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:.02em;
-    display:flex;
-    align-items:center;
-    gap:7px;
-    padding:8px 12px;
-    border-radius:20px;
-    border:1px solid var(--border);
-    background:var(--panel);
-    color:var(--text-dim);
-    cursor:pointer;
-    user-select:none;
-    transition:all .15s;
-    white-space:nowrap;
-  }
-  .chip .swatch{ width:8px; height:8px; border-radius:50%; }
-  .chip:hover{ border-color:var(--text-faint); color:var(--text); }
-  .chip.active{
-    background:var(--cat-color, #333);
-    color:#0E1113;
-    border-color:var(--cat-color, #333);
-    font-weight:600;
-  }
-  .chip.active .swatch{ background:#0E1113; }
-
-  .count-live{
-    font-family:'JetBrains Mono', monospace;
-    font-size:12px;
-    color:var(--text-faint);
-    margin-left:auto;
-    white-space:nowrap;
-  }
-
-  /* ---------- SECTIONS ---------- */
-  main{ max-width:1180px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
-
-  .cat-section{ margin-top:52px; }
-
-  .cat-head{
-    display:flex;
-    align-items:baseline;
-    gap:14px;
-    padding-bottom:14px;
-    border-bottom:2px solid var(--cat-color);
-    margin-bottom:22px;
-  }
-  .cat-head .range{
-    font-family:'JetBrains Mono', monospace;
-    font-size:12px;
-    color:var(--cat-color);
-    background:color-mix(in srgb, var(--cat-color) 14%, transparent);
-    padding:4px 9px;
-    border-radius:5px;
-    font-weight:600;
-  }
-  .cat-head h2{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:22px;
-    font-weight:600;
-  }
-  .cat-head .cat-count{
-    font-family:'JetBrains Mono', monospace;
-    font-size:12px;
-    color:var(--text-faint);
-    margin-left:auto;
-  }
-
-  .card-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(330px, 1fr));
-    gap:14px;
-  }
-
-  .card{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-left:3px solid var(--cat-color);
-    border-radius:8px;
-    padding:16px 18px 17px;
-    transition:transform .12s ease, border-color .12s ease, background .12s ease;
-  }
-  .card:hover{
-    transform:translateY(-2px);
-    background:var(--panel2);
-    border-color:var(--border-soft);
-    border-left-color:var(--cat-color);
-  }
-
-  .card-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:8px;
-  }
-  .ticket-id{
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    color:var(--cat-color);
-    font-weight:600;
-    letter-spacing:.03em;
-  }
-  .status{
-    font-family:'JetBrains Mono', monospace;
-    font-size:9.5px;
-    letter-spacing:.08em;
-    color:#7FCB5B;
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
-  .status::before{ content:"✓"; font-size:10px; }
-
-  .card h3{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:15px;
-    font-weight:600;
-    line-height:1.32;
-    margin-bottom:11px;
-    color:var(--text);
-  }
-
-  .row{ display:flex; gap:8px; margin-top:7px; }
-  .row .tag{
-    font-family:'JetBrains Mono', monospace;
-    font-size:9.5px;
-    letter-spacing:.09em;
-    color:var(--text-faint);
-    flex:0 0 auto;
-    padding-top:2px;
-    min-width:44px;
-  }
-  .row.fix .tag{ color:var(--cat-color); }
-  .row p{
-    font-size:13px;
-    color:var(--text-dim);
-    line-height:1.45;
-  }
-  .row.fix p{ color:#c9cdd1; }
-
-  .no-results{
-    text-align:center;
-    padding:60px 20px;
-    color:var(--text-faint);
-    font-family:'JetBrains Mono', monospace;
-    font-size:13px;
-    display:none;
-  }
-
-  footer{
-    max-width:1180px;
-    margin:70px auto 0;
-    padding:24px 24px 0;
-    border-top:1px solid var(--border);
-    color:var(--text-faint);
-    font-size:12.5px;
-    font-family:'JetBrains Mono', monospace;
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-
-  @media (max-width:640px){
-    header.hero{padding:44px 18px 30px;}
-    .controls{padding:12px 16px;}
-    main{padding:0 16px;}
-    .cat-head{flex-wrap:wrap;}
-    .cat-head .cat-count{ margin-left:0; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    .card{transition:none;}
-  }
-</style>
-</head>
-<body>
-
-<div class="noise"></div>
-
-<header class="hero">
-  <div class="eyebrow"><span class="dot"></span> ON-PAGE SEO · CLOSED TICKET LOG</div>
-  <h1 class="title">125 issues found.<br><span class="accent">125 issues fixed.</span></h1>
-  <p class="subtitle">Pichle <b>3 saal</b> mein har live audit ke dauran flag hone wale on-page SEO masail ka pura record — Title &amp; Meta se le kar Schema tak, har entry apni <b>problem</b> aur apply ki gayi <b>solution</b> ke saath.</p>
-
-  <div class="stat-strip">
-    <div class="stat"><div class="num">125</div><div class="lbl">Total Issues</div></div>
-    <div class="stat"><div class="num">7</div><div class="lbl">Categories</div></div>
-    <div class="stat"><div class="num">3</div><div class="lbl">Years Covered</div></div>
-    <div class="stat"><div class="num">100%</div><div class="lbl">Resolved</div></div>
-  </div>
-</header>
-
-<div class="controls">
-  <div class="controls-inner">
-    <input id="search" type="text" placeholder="Issue, problem ya solution search karein…">
-    <div class="chips" id="chips"></div>
-    <div class="count-live" id="liveCount"></div>
-  </div>
-</div>
-
-<main id="main"></main>
-
-<div class="no-results" id="noResults">— koi matching issue nahi mila —</div>
-
-<footer>
-  <span>SEO AUDIT LOG · PART 1 OF 2 · ON-PAGE</span>
-  <span>NEXT: OFF-PAGE SEO (125 ISSUES)</span>
-</footer>
-
 <script>
 const categories = [
-  {id:'meta',    name:'Title &amp; Meta Tags',            range:'01–15',  color:'var(--c-meta)'},
-  {id:'heading', name:'Heading Tags Structure',            range:'16–30',  color:'var(--c-heading)'},
-  {id:'content', name:'Content Quality &amp; Keywords',    range:'31–55',  color:'var(--c-content)'},
-  {id:'linking', name:'Internal Linking &amp; Navigation', range:'56–75',  color:'var(--c-linking)'},
-  {id:'media',   name:'Images &amp; Multimedia',           range:'76–95',  color:'var(--c-media)'},
-  {id:'url',     name:'URL Structure &amp; Canonicalization', range:'96–110', color:'var(--c-url)'},
-  {id:'schema',  name:'Schema &amp; Structured Data',      range:'111–125', color:'var(--c-schema)'}
+  {id:'onpage',   name:'On-Page SEO',                 range:'01–35',  color:'var(--c-meta)'},
+  {id:'offpage',  name:'Off-Page SEO & Backlinks',    range:'36–60',  color:'var(--c-heading)'},
+  {id:'tech',     name:'Technical SEO',               range:'61–95',  color:'var(--c-content)'},
+  {id:'local',    name:'Local SEO & GMB',             range:'96–125', color:'var(--c-url)'}
 ];
 
 const issues = [
-{c:'meta',t:'Missing Primary Title Tag',p:'Search engines page ka topic identify nahi kar pa rahe the.',s:'Target keyword ke sath natural Title tag implement kiya.'},
-{c:'meta',t:'Title Tag Exceeds Pixel Width (>600px)',p:'Search results mein title cut (truncate) ho raha tha.',s:'Titles ko 50–60 characters (580px) ke andar condense kiya.'},
-{c:'meta',t:'Title Tag Too Short',p:'Context kam hone ki wajah se low CTR tha.',s:'Secondary keywords aur brand name add karke length optimize ki.'},
-{c:'meta',t:'Duplicate Title Tags Across Pages',p:'Canonical confusion paida ho rahi thi.',s:'Har page ke liye unique, intent-driven titles assign kiye.'},
-{c:'meta',t:'Title Keyword Stuffing',p:'Penalty ka risk tha.',s:'Natural language aur single primary keyword focus banaya.'},
-{c:'meta',t:'Missing Meta Description',p:'Google random page snippets pick kar raha tha.',s:'High-converting 155-character meta descriptions compose kiye.'},
-{c:'meta',t:'Duplicate Meta Descriptions',p:'Search visibility split ho rahi thi.',s:'Dynamic / unique meta templates set kiye.'},
-{c:'meta',t:'Meta Description Too Long',p:'Search snippets mein truncated text show ho raha tha.',s:'Summary ko 150–160 characters mein fit kiya.'},
-{c:'meta',t:'Missing Call-To-Action in Meta',p:'Organic Click-Through Rate (CTR) low tha.',s:'Meta mein "Get Quote", "Learn More" jaisi CTAs add kiye.'},
-{c:'meta',t:'Meta Keywords Tag Present',p:'Deprecated tag jo competitor ko intelligence deta hai.',s:'HTML header se Meta Keywords tag remove kiya.'},
-{c:'meta',t:'Page Title Matches H1 Exactly',p:'Variety aur semantic richness missing thi.',s:'Title tag aur H1 tag ko slightly vary karke secondary search intent wrap kiya.'},
-{c:'meta',t:'Non-Localized Title Tags',p:'Local search queries par rank nahi kar raha tha.',s:'Title mein City/State modifiers add kiye.'},
-{c:'meta',t:'Brand Name Missing in Titles',p:'Brand authority build nahi ho rahi thi.',s:'Title ke end par | Brand Name append kiya.'},
-{c:'meta',t:'Title Tag Starts with Generic Words',p:'Primary keyword ki prominence kam thi.',s:'Front-load technique se main keyword ko start mein shift kiya.'},
-{c:'meta',t:'Special Characters Breaking Titles',p:'Browsers mein HTML entities corrupt show ho rahi thin.',s:'Encodings UTF-8 par fix kiye.'},
+  /* ON-PAGE SEO (1-35) */
+  {c:'onpage',t:'Missing Primary Title Tag',p:'Search engines page ka main topic identify nahi kar pa rahe the.',s:'Target keyword ke sath natural Title tag implement kiya.'},
+  {c:'onpage',t:'Title Tag Exceeds Pixel Width (>600px)',p:'Search results mein title cut ho raha tha.',s:'Titles ko 50–60 characters (580px) ke andar condense kiya.'},
+  {c:'onpage',t:'Missing Meta Description',p:'Google random page snippets pick kar raha tha.',s:'High-converting 155-character meta descriptions write kiye.'},
+  {c:'onpage',t:'Duplicate Meta Descriptions',p:'Search visibility split ho rahi thi.',s:'Unique meta description templates set kiye.'},
+  {c:'onpage',t:'Missing H1 Tag',p:'Search engine main heading detect nahi kar pa raha tha.',s:'Page par exact 1 unique H1 tag deploy kiya.'},
+  {c:'onpage',t:'Multiple H1 Tags on Single Page',p:'Topical focus confuse ho raha tha.',s:'Secondary H1s ko H2 mein convert kiya.'},
+  {c:'onpage',t:'Skipped Heading Levels',p:'Document outline structure broken tha.',s:'Hierarchical flow (H1 → H2 → H3) restore kiya.'},
+  {c:'onpage',t:'Keyword Cannibalization',p:'Multiple pages same target term ke liye fight kar rahe the.',s:'Pages merge kiye aur 301 redirect / canonical set kiya.'},
+  {c:'onpage',t:'Thin Content (<300 words)',p:'Indexability drop ho rahi thi.',s:'Comprehensive depth ke sath 1200+ words content target page par update kiya.'},
+  {c:'onpage',t:'Keyword Stuffing (>4% Density)',p:'Spam penalty risk tha.',s:'Keyword density 1.5% tak la kar natural synonyms add kiye.'},
+  {c:'onpage',t:'Low Topical Authority',p:'Core entity coverage weak thi.',s:'Entity-based semantic content clusters create kiye.'},
+  {c:'onpage',t:'Outdated Content',p:'Information old hone se rankings drop hui thin.',s:'Current year facts, stats aur fresh data inject kiya.'},
+  {c:'onpage',t:'Unformatted Wall of Text',p:'High bounce rate tha.',s:'Bullet points, bold text aur short paragraphs add kiye.'},
+  {c:'onpage',t:'Missing Keyword in First 100 Words',p:'Topic confirmation slow tha.',s:'Introduction paragraph mein seed keyword inject kiya.'},
+  {c:'onpage',t:'AI-Generated Spam Content',p:'Generic text index nahi ho raha tha.',s:'Human editorial pass, expert insights (E-E-A-T) aur custom visuals add kiye.'},
+  {c:'onpage',t:'Lack of Original Media',p:'Stock images search value destroy kar rahi thin.',s:'Custom infographics aur screenshots publish kiye.'},
+  {c:'onpage',t:'Search Intent Mismatch',p:'Transactional keyword par informational content rank kar raha tha.',s:'Page layout ko product/service booking design mein rewrite kiya.'},
+  {c:'onpage',t:'Missing Author Byline (E-E-A-T)',p:'Trust score low tha.',s:'Verified author bio with social links attach kiya.'},
+  {c:'onpage',t:'No Table of Contents (ToC)',p:'Long-form content browse karna mushkil tha.',s:'Dynamic ToC integrate kiya.'},
+  {c:'onpage',t:'Lack of LSI / NLP Keywords',p:'Search engine context capture nahi kar raha tha.',s:'NLP entities aur LSI terms integrate kiye.'},
+  {c:'onpage',t:'Missing Call-to-Action (CTA)',p:'Low conversions.',s:'Sticky aur mid-content CTA buttons insert kiye.'},
+  {c:'onpage',t:'Missing FAQ Section',p:'Long-tail voice queries miss ho rahi thin.',s:'Accordion-style FAQ section page footer par design kiya.'},
+  {c:'onpage',t:'Image Missing Alt Text',p:'Image search indexation fail thi.',s:'Keyword-rich descriptive Alt tags assign kiye.'},
+  {c:'onpage',t:'Generic Image File Names',p:'Zero SEO context in files.',s:'IMG_001.jpg ko plumber-midland-tx.jpg se rename kiya.'},
+  {c:'onpage',t:'Duplicate Content (Internal)',p:'URL parameters duplication create kar rahe the.',s:'Self-referential canonical tags deploy kiye.'},
+  {c:'onpage',t:'Non-Descriptive Headings',p:'User aur bot ke liye zero context tha.',s:'Clear, informative sub-headings craft kiye.'},
+  {c:'onpage',t:'H1 Placement Below Fold',p:'Relevance delay thi.',s:'H1 ko hero section (above-the-fold) shift kiya.'},
+  {c:'onpage',t:'Plagiarized Content Sections',p:'Web syndication issue.',s:'Content rewrite karke 100% original copy ensure ki.'},
+  {c:'onpage',t:'Grammatical Errors',p:'Professional image ruin ho rahi thi.',s:'Proofreading tools se full audit and cleanup kiya.'},
+  {c:'onpage',t:'Text-To-HTML Ratio Low (<10%)',p:'Code excess tha.',s:'Bloated code clean karke text ratio fix kiya.'},
+  {c:'onpage',t:'Broken Internal Links',p:'Crawl budget waste ho raha tha.',s:'Dead links update aur 404 fix kiye.'},
+  {c:'onpage',t:'Orphan Pages',p:'Pages nav link se missing the.',s:'Internal links connect kiye.'},
+  {c:'onpage',t:'Generic Anchor Texts',p:'Link value pass nahi ho rahi thi.',s:'Descriptive keywords use kiye.'},
+  {c:'onpage',t:'Nofollow on Internal Links',p:'PageRank leak ho raha tha.',s:'rel=nofollow attributes remove kiye.'},
+  {c:'onpage',t:'Missing Breadcrumbs',p:'Navigation path absent tha.',s:'Breadcrumb trail implement kiya.'},
 
-{c:'heading',t:'Missing H1 Tag',p:'Search engine main heading detect nahi kar pa raha tha.',s:'Page par exact 1 unique H1 tag deploy kiya.'},
-{c:'heading',t:'Multiple H1 Tags on Single Page',p:'Topical focus confuse ho raha tha.',s:'Secondary H1s ko H2 mein convert kiya.'},
-{c:'heading',t:'Skipped Heading Levels (e.g., H1 to H3)',p:'Document outline structure broken tha.',s:'Hierarchical flow (H1 → H2 → H3) restore kiya.'},
-{c:'heading',t:'H1 Tag Hidden via CSS (display:none)',p:'Black-hat signal lag raha tha.',s:'Hidden CSS classes remove karke visible structure banaya.'},
-{c:'heading',t:'Empty Heading Tags (&lt;h2&gt;&lt;/h2&gt;)',p:'Clean HTML validation fail ho rahi thi.',s:'Code audit karke empty DOM nodes delete kiye.'},
-{c:'heading',t:'Heading Tags Used for Styling/Font Size',p:'Semantics ruin ho rahe the.',s:'Styling CSS mein move ki aur heading tags ko content structure ke liye reserve kiya.'},
-{c:'heading',t:'H2 Tags Missing Focus Keywords',p:'Sub-topics optimize nahi the.',s:'LSI aur semantic variants ko H2 tags mein blend kiya.'},
-{c:'heading',t:'Non-Descriptive Headings (e.g., "Details")',p:'User aur bot dono ke liye zero context tha.',s:'Clear, informative sub-headings craft kiye.'},
-{c:'heading',t:'H1 Tag Enclosed in Image',p:'Text content read nahi ho raha tha.',s:'Image ko proper HTML text element se replace kiya.'},
-{c:'heading',t:'Too Many H2 Tags (>20 per article)',p:'Content over-fragmented tha.',s:'Logical sections merge kiye.'},
-{c:'heading',t:'H3/H4 Tags Missing in Long Content',p:'Reading experience poor tha.',s:'Scannability ke liye multi-tier headings add kiye.'},
-{c:'heading',t:'Anchor Links Missing in H2s',p:'Jump-links work nahi kar rahe the.',s:'Table of Contents ke liye H2 IDs assign kiye.'},
-{c:'heading',t:'H1 Tag Placement Below the Fold',p:'Core relevance detect hone mein delay tha.',s:'H1 ko hero section (above-the-fold) shift kiya.'},
-{c:'heading',t:'Generic Subheadings in Service Pages',p:'Context weak tha.',s:'Keyword-enriched service headings write kiye.'},
-{c:'heading',t:'Duplicated Headings Across Sections',p:'Content repetitive lag raha tha.',s:'Unique phrasing implement ki.'},
+  /* OFF-PAGE SEO & BACKLINKS (36-60) */
+  {c:'offpage',t:'Toxic Backlink Profile',p:'Spammy links ki wajah se risk tha.',s:'Disavow tool use karke toxic links remove kiye.'},
+  {c:'offpage',t:'Over-Optimized Anchor Text',p:'Exact-match anchor penalty risk.',s:'Branded aur generic anchor links ka ratio balance kiya.'},
+  {c:'offpage',t:'Low Domain Authority Links',p:'Authority rank grow nahi ho rahi thi.',s:'High-DA niche relevant guest posts acquire kiye.'},
+  {c:'offpage',t:'Broken Backlinks (404 pages)',p:'Passing link equity lost ho rahi thi.',s:'301 redirects se link authority preserve ki.'},
+  {c:'offpage',t:'Lack of Niche Relevance in Links',p:'Unrelated links zero value de rahe the.',s:'Strictly niche-targeted link outreach kiya.'},
+  {c:'offpage',t:'Missing Google Business Citations',p:'Local authority weak thi.',s:'Top local directories par Business citations list kiye.'},
+  {c:'offpage',t:'Inconsistent NAP in Citations',p:'Name/Address/Phone mismatch tha.',s:'All web citations ka NAP audit aur sync kiya.'},
+  {c:'offpage',t:'Zero Social Signals',p:'Social proof missing tha.',s:'Content sharing syndication workflow active kiya.'},
+  {c:'offpage',t:'Unclaimed Directory Listings',p:'Competitors abuse kar sakte the.',s:'Major directory profiles claim aur verify kiye.'},
+  {c:'offpage',t:'No High-Tier PR Backlinks',p:'Brand trust score low tha.',s:'Press Releases aur HARO outreach campaign run ki.'},
+  {c:'offpage',t:'Reciprocal Link Spam (Link Farms)',p:'Search engine penalty warning.',s:'Low quality reciprocal links purge kiye.'},
+  {c:'offpage',t:'Lack of Image Backlinks',p:'Image search link opportunity miss thi.',s:'Infographics release karke embed links claim kiye.'},
+  {c:'offpage',t:'Unlinked Brand Mentions',p:'Free link opportunities waste ho rahi thin.',s:'Web monitoring tools se brand mentions detect karke links demand kiye.'},
+  {c:'offpage',t:'PBN Link Footprints',p:'De-indexation threat.',s:'Risky PBN links ko profile se isolate kiya.'},
+  {c:'offpage',t:'Low Velocity Link Building',p:'Rankings stagnant thin.',s:'Consistent, natural link acquisition strategy setup ki.'},
+  {c:'offpage',t:'Missing Competitor Backlink Replicas',p:'Gap analysis missing tha.',s:'Competitor gap links identify karke acquire kiye.'},
+  {c:'offpage',t:'No Podcast / Visual Citations',p:'Diversified links absent the.',s:'Audio/video submission links acquire kiye.'},
+  {c:'offpage',t:'Directory Submission to Spam Sites',p:'Bad neighborhood status.',s:'Only high-editorial status directories build kiye.'},
+  {c:'offpage',t:'Missing EDU / GOV Links',p:'Trust signals low the.',s:'Scholarship outreach se EDU/GOV links secure kiye.'},
+  {c:'offpage',t:'No Wikipedia / Entity Links',p:'Knowledge panel absent tha.',s:'Wikipedia references aur Wikidata links configure kiye.'},
+  {c:'offpage',t:'High Spam Score Backlinks',p:'Moz spam score high tha.',s:'Bad link sources disavow file mein append kiye.'},
+  {c:'offpage',t:'No Local Event Sponsorship Links',p:'Geo-trust absent tha.',s:'Local community sponsorship links acquire kiye.'},
+  {c:'offpage',t:'Zero Referral Traffic Links',p:'Dead links without clicks.',s:'High-traffic sites par contextual links placement li.'},
+  {c:'offpage',t:'Link Loss (Broken Outreach)',p:'Historical links drop ho rahe the.',s:'Re-engagement email campaigns se lost links recover kiye.'},
+  {c:'offpage',t:'No Tier-2 Backlink Layering',p:'Tier 1 links weak the.',s:'Tier-2 links boost strategy execute ki.'},
 
-{c:'content',t:'Keyword Cannibalization',p:'Multiple pages same target term ke liye fighting kar rahe the.',s:'Pages merge kiye aur 301 redirect / canonical set kiya.'},
-{c:'content',t:'Thin Content (&lt;300 words)',p:'Indexability drop ho rahi thi.',s:'Comprehensive depth ke sath 1200+ words target page update kiya.'},
-{c:'content',t:'Duplicate Content (Internal)',p:'URL parameters ki wajah se duplicate versions indexing ho rahe the.',s:'Self-referential canonical tags deploy kiye.'},
-{c:'content',t:'Keyword Stuffing (>4% Density)',p:'Spam penalty score rise kar raha tha.',s:'Keyword density 1.5% tak la kar natural synonyms add kiye.'},
-{c:'content',t:'Low Topical Authority',p:'Core entity coverage weak thi.',s:'Entity-based semantic content clusters create kiye.'},
-{c:'content',t:'Outdated Content',p:'Information old hone se rankings drop hui thin.',s:'Current year facts, stats aur fresh data inject kiya.'},
-{c:'content',t:'High Readability Grade Level',p:'Target audience ko content complex lag raha tha.',s:'Readability score improve karke Grade 7-8 level par laya.'},
-{c:'content',t:'Unformatted Content Blocks (Wall of Text)',p:'High bounce rate tha.',s:'Bullet points, bold texts aur short paragraphs add kiye.'},
-{c:'content',t:'Missing Target Keyword in First 100 Words',p:'Topic confirmation slow tha.',s:'Introduction paragraph mein seed keyword inject kiya.'},
-{c:'content',t:'AI-Generated Spam Content',p:'Generic text index nahi ho raha tha.',s:'Human editorial pass, expert insights (E-E-A-T) aur custom visuals add kiye.'},
-{c:'content',t:'Lack of Original Media',p:'Stock images search value destroy kar rahi thin.',s:'Custom infographics aur screenshots publish kiye.'},
-{c:'content',t:'Search Intent Mismatch',p:'Transactional keyword par informational content rank karne ki koshish thi.',s:'Page layout ko product/service booking design mein rewrite kiya.'},
-{c:'content',t:'Missing Author Byline (E-E-A-T issue)',p:'Trust score low tha.',s:'Verified author bio with social links attach kiya.'},
-{c:'content',t:'No Table of Contents (ToC)',p:'Long-form content browse karna mushkil tha.',s:'Dynamic ToC plugin / script integrate kiya.'},
-{c:'content',t:'Plagiarized Content Sections',p:'Web syndication issue tha.',s:'Content re-write karke 100% original copy ensure ki.'},
-{c:'content',t:'Grammatical &amp; Spelling Errors',p:'Professional perception ruin ho raha tha.',s:'Proofreading tools se full site audit and cleanup kiya.'},
-{c:'content',t:'Lack of LSI / NLP Keywords',p:'Search engine context capture nahi kar raha tha.',s:'SurferSEO/TF-IDF tools se NLP entities integrate kiye.'},
-{c:'content',t:'Poor Call-to-Action (CTA) Placement',p:'Low conversions.',s:'Sticky aur mid-content CTA buttons insert kiye.'},
-{c:'content',t:'Too Many Affiliate Links Above the Fold',p:'Ad-heavy penalization threat tha.',s:'Affiliate links ko balance kiya aur disclosure note top par add kiya.'},
-{c:'content',t:'Missing FAQ Section',p:'Long-tail voice queries miss ho rahi thin.',s:'Accordion-style FAQ section page footer par design kiya.'},
-{c:'content',t:'Duplicate H1/Title across Paginated Pages',p:'Pagination issues.',s:'Title mein "Page X of Y" pattern append kiya.'},
-{c:'content',t:'Commercial Keywords on Informational Blog',p:'Bounce rate surge.',s:'Intent shift karke blog ko guide format diya aur service page link kiya.'},
-{c:'content',t:'Text-To-HTML Ratio Low (&lt;10%)',p:'Excess DOM elements, low content.',s:'Bloated code clean karke text volume increase kiya.'},
-{c:'content',t:'Un-targeted Geo-Keywords',p:'Local relevance drop.',s:'Service area localized keywords naturally weave kiye.'},
-{c:'content',t:'Broken Embeds (YouTube / Maps)',p:'Poor UX.',s:'Updated iFrame sources fix kiye.'},
+  /* TECHNICAL SEO (61-95) */
+  {c:'tech',t:'Slow Page Speed (Core Web Vitals Fail)',p:'High LCP aur CLS issues.',s:'Image compression, caching aur code minification fix ki.'},
+  {c:'tech',t:'Missing XML Sitemap',p:'Search bots crawl nahi kar pa rahe the.',s:'Dynamic XML sitemap create karke Search Console par submit kiya.'},
+  {c:'tech',t:'Robots.txt Blocking Critical Assets',p:'JS/CSS resources block the.',s:'Robots.txt clean karke rendering permission unlock ki.'},
+  {c:'tech',t:'Non-HTTPS (No SSL Certificate)',p:'Security warning aur ranking drop.',s:'SSL certificate install karke HTTP to HTTPS 301 force kiya.'},
+  {c:'tech',t:'HTTP/HTTPS Mixed Content Errors',p:'Browsers padlocks red flag kar rahe the.',s:'All internal assets ko HTTPS relative pathing par shift kiya.'},
+  {c:'tech',t:'Missing Canonical Tags',p:'Duplicate parameter pages index ho rahi thin.',s:'Self-referential canonical tags add kiye.'},
+  {c:'tech',t:'Wrong Canonical Tags',p:'Main page ranking leak ho rahi thi.',s:'Canonical URL mapping correct ki.'},
+  {c:'tech',t:'Redirect Chains & Loops',p:'Crawl delay aur link juice loss.',s:'Direct 1-step 301 redirects configure kiye.'},
+  {c:'tech',t:'302 Temporary Redirects Used Instead of 301',p:'PageRank transfer nahi ho raha tha.',s:'302s ko permanent 301 redirects mein update kiya.'},
+  {c:'tech',t:'Mobile Unfriendliness (Non-Responsive)',p:'Mobile indexing audit fail.',s:'Responsive CSS Grid/Flexbox UI repair kiya.'},
+  {c:'tech',t:'Missing Schema Markup',p:'Rich snippets display nahi ho rahe the.',s:'JSON-LD Structured Data (Organization, Article) inject kiya.'},
+  {c:'tech',t:'Schema Syntax Errors',p:'Google testing tool errors show kar raha tha.',s:'JSON-LD formatting aur required fields fix kiye.'},
+  {c:'tech',t:'Large Uncompressed Images',p:'Page weight > 5MB tha.',s:'Images ko WebP format mein convert karke compress kiya.'},
+  {c:'tech',t:'Un-minified JS & CSS Files',p:'Render blocking issues.',s:'Assets minification aur Gzip/Brotli compression apply ki.'},
+  {c:'tech',t:'Missing Hreflang Tags',p:'Multi-region targeting issue.',s:'Language-region targeted hreflang tags implement kiye.'},
+  {c:'tech',t:'404 Page Without Navigation',p:'User bounce rates high.',s:'Custom 404 page with search bar aur links design kiya.'},
+  {c:'tech',t:'Soft 404 Errors',p:'Thin/Empty pages returning 200 OK.',s:'Proper 404 status header ya redirects assign kiye.'},
+  {c:'tech',t:'403 / 500 Server Errors',p:'Bot crawling drop.',s:'Server config aur database optimization perform ki.'},
+  {c:'tech',t:'Excessive DOM Size',p:'Browser rendering delay.',s:'HTML Structure clean aur light-weight design kiya.'},
+  {c:'tech',t:'Render-Blocking Resources',p:'FCP delays.',s:'JS deferment aur CSS critical pathing configure ki.'},
+  {c:'tech',t:'Missing Favicon',p:'SERP listing visually incomplete thi.',s:'SVG aur PNG favicon assets set kiye.'},
+  {c:'tech',t:'Unindexed Pages via Noindex Tag',p:'Important pages SERP se missing the.',s:'Accidental meta noindex tags remove kiye.'},
+  {c:'tech',t:'Crawl Budget Waste on URL Parameters',p:'Faceted navigation duplication.',s:'Search Console parameter handling rules apply kiye.'},
+  {c:'tech',t:'Missing Google Search Console Verification',p:'Zero performance tracking.',s:'GSC Tag setup aur property ownership verify ki.'},
+  {c:'tech',t:'Missing Bing Webmaster Tools',p:'Bing search presence weak thi.',s:'Bing Webmaster integration complete ki.'},
+  {c:'tech',t:'Lack of Browser Caching Headers',p:'Re-visit speed slow thi.',s:'Cache-Control expiration headers set kiye.'},
+  {c:'tech',t:'Cumulative Layout Shift (CLS) > 0.25',p:'Visual instability issue.',s:'Explicit height/width attributes set kiye images aur frames par.'},
+  {c:'tech',t:'Largest Contentful Paint (LCP) > 4s',p:'Slow loading speeds.',s:'Server response time aur hero image loading boost ki.'},
+  {c:'tech',t:'Interaction to Next Paint (INP) Delays',p:'UI input delay.',s:'Heavy JS scripts delay/optimize kiye.'},
+  {c:'tech',t:'Missing Indexing API Setup',p:'New content indexing super slow thi.',s:'Google Indexing API setup karke instant indexing enable ki.'},
+  {c:'tech',t:'Broken JS Script Execution',p:'Page functionality failure.',s:'Console script errors debug karke fix kiye.'},
+  {c:'tech',t:'Uncompressed Gzip / Brotli Assets',p:'High server payload.',s:'Server-level compression active ki.'},
+  {c:'tech',t:'Incorrect URL Slug Structure',p:'Messy dynamic URLs (e.g., id=9832).',s:'Clean SEO-friendly permalinks configure kiye.'},
+  {c:'tech',t:'Trailing Slash Inconsistency',p:'Duplicate page versions.',s:'Server-level trailing slash normalization enforce ki.'},
+  {c:'tech',t:'Orphan Sitemaps',p:'Sitemap auto-sync off tha.',s:'Automatic sitemap ping scripts setup kiye.'},
 
-{c:'linking',t:'Orphan Pages',p:'Main site navigation se links isolated the.',s:'Category aur related blog posts se internal links connect kiye.'},
-{c:'linking',t:'Generic Anchor Text (e.g., "Click Here")',p:'Keyword relevancy pass nahi ho rahi thi.',s:'Descriptive, keyword-rich anchor text update kiya.'},
-{c:'linking',t:'Broken Internal Links (404 Errors)',p:'Crawl budget waste ho raha tha.',s:'Screaming Frog audit karke redirects / dead links update kiye.'},
-{c:'linking',t:'Deep Link Depth (>4 Clicks from Home)',p:'Crawlers deep pages skip kar rahe the.',s:'Site architecture flat ki (3 clicks maximum).'},
-{c:'linking',t:'Nofollow Tags on Internal Links',p:'Link equity flow block ho rahi thi.',s:'Internal links se rel="nofollow" attributes remove kiye.'},
-{c:'linking',t:'Excessive Internal Links (>100 per page)',p:'Link juice dilute ho raha tha.',s:'Links prune karke contextual priority links rakhe.'},
-{c:'linking',t:'Missing Breadcrumb Navigation',p:'User site location track nahi kar pa raha tha.',s:'Schema-supported breadcrumb trail implement kiya.'},
-{c:'linking',t:'Links Opening in Wrong Target Tabs',p:'Navigat
+  /* LOCAL SEO & GMB (96-125) */
+  {c:'local',t:'Unclaimed Google Business Profile',p:'Local map pack missing listing.',s:'GMB profile claim aur postcard/video verification perform ki.'},
+  {c:'local',t:'Incomplete GMB Business Information',p:'Trust score low tha.',s:'Hours, category, phone aur description 100% complete kiye.'},
+  {c:'local',t:'Primary GMB Category Mismatch',p:'Map pack ranking issue.',s:'Primary category update karke core service focus di.'},
+  {c:'local',t:'Missing Secondary GMB Categories',p:'Secondary service queries missed.',s:'Relevant secondary categories select kiye.'},
+  {c:'local',t:'Missing Local Schema (LocalBusiness)',p:'Structured local data absent.',s:'JSON-LD LocalBusiness Schema generator setup kiya.'},
+  {c:'local',t:'NAP Mismatch on Web vs GMB',p:'Google Local algorithm confusion.',s:'Exact NAP details across all platforms standardize kiye.'},
+  {c:'local',t:'Low Google Review Count',p:'Map pack CTR low tha.',s:'Automated review generation request system implement kiya.'},
+  {c:'local',t:'Unanswered Google Reviews',p:'Customer engagement signals missing.',s:'All reviews par keyword-rich responses write kiye.'},
+  {c:'local',t:'Missing GMB Photo Updates',p:'Listing dormant lag rahi thi.',s:'Weekly geo-tagged photos uploading pipeline configure ki.'},
+  {c:'local',t:'No Local Geo-Targeted Service Pages',p:'City landing pages absent the.',s:'Dedicated location landing pages build kiye.'},
+  {c:'local',t:'Missing Embedded Google Maps on Site',p:'Local signals missing the.',s:'Location map IFrame footer/contact page par embed kiya.'},
+  {c:'local',t:'Incorrect Map Pin Location',p:'Driving directions error.',s:'Exact coordinates pinpoint move karke fix kiye.'},
+  {c:'local',t:'No GMB Posts / Announcements',p:'Zero local engagement.',s:'Weekly updates aur offers posts schedule kiye.'},
+  {c:'local',t:'Missing Geo-Coordinates in Schema',p:'Precision location signal absent.',s:'Latitude aur Longitude coordinates Schema mein append kiye.'},
+  {c:'local',t:'Unoptimized Local Service Description',p:'Keywords absent in GMB.',s:'Keyword-enriched business description rewrite ki.'},
+  {c:'local',t:'No Local Citations in Target Region',p:'Geographic authority zero thi.',s:'City-specific local directory links publish kiye.'},
+  {c:'local',t:'Service Radius Not Configured',p:'Service Area Business (SAB) listing weak.',s:'Exact zip codes aur service radius mark kiye.'},
+  {c:'local',t:'Missing Local Phone Number (Using 1-800)',p:'Local presence weak lag rahi thi.',s:'Local area code phone number assign kiya.'},
+  {c:'local',t:'Spam Competitor Listings in Map Pack',p:'Rankings hijacked thi.',s:'Google Redressal Complaint Form se fake listings remove karwayein.'},
+  {c:'local',t:'No Geo-Targeted Keywords in Image Meta',p:'Image local signals missed.',s:'EXIF data aur geo-tagging images par apply ki.'},
+  {c:'local',t:'Missing Q&A Section on GMB',p:'Direct queries unanswered thin.',s:'Pre-populated local FAQs publish kiye GMB profile par.'},
+  {c:'local',t:'Inconsistent Working Hours',p:'Negative customer feedback.',s:'Holiday aur actual working hours calibrate kiye.'},
+  {c:'local',t:'No Geo-Specific Landing Page Title Tags',p:'Local intent miss tha.',s:'Title: [Service] in [City, State] update kiya.'},
+  {c:'local',t:'Missing Local Backlinks from Local News',p:'Regional authority absent.',s:'Local press updates aur news citations secure kiye.'},
+  {c:'local',t:'Duplicates GMB Profiles Created',p:'Listing suspension risk.',s:'Duplicate profiles merge/delete request execute ki.'},
+  {c:'local',t:'No Call Tracking Integration',p:'Local call conversions untracked.',s:'Dynamic Call Tracking (DNI) setup kiya.'},
+  {c:'local',t:'Missing Driving Directions Content',p:'Local relevance missing.',s:'Landmarks aur driving directions contact page par write kiye.'},
+  {c:'local',t:'Unclaimed Apple Maps & Bing Local Listings',p:'Non-Google search traffic lost.',s:'Apple Maps Places aur Bing Places profiles claim kiye.'},
+  {c:'local',t:'No Local Community Partner Links',p:'Hyper-local trust missing.',s:'Local Chamber of Commerce directory links acquire kiye.'},
+  {c:'local',t:'Zero Mention of Surrounding Suburbs',p:'Sub-city traffic missed.',s:'Nearby towns aur service areas text content mein weave kiye.'}
+];
+
+let activeCat = 'all';
+let searchQuery = '';
+
+function init(){
+  buildChips();
+  render();
+
+  document.getElementById('search').addEventListener('input', (e)=>{
+    searchQuery = e.target.value.toLowerCase().trim();
+    render();
+  });
+}
+
+function buildChips(){
+  const container = document.getElementById('chips');
+  let html = `<div class="chip ${activeCat==='all'?'active':''}" data-cat="all" style="--cat-color:var(--text)">
+    <span class="swatch"></span> All Issues
+  </div>`;
+
+  categories.forEach(c => {
+    html += `<div class="chip ${activeCat===c.id?'active':''}" data-cat="${c.id}" style="--cat-color:${c.color}">
+      <span class="swatch"></span> ${c.name}
+    </div>`;
+  });
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.chip').forEach(el => {
+    el.addEventListener('click', ()=>{
+      activeCat = el.getAttribute('data-cat');
+      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      el.classList.add('active');
+      render();
+    });
+  });
+}
+
+function render(){
+  const main = document.getElementById('main');
+  const noRes = document.getElementById('noResults');
+  
+  let filtered = issues.filter(item => {
+    const matchCat = (activeCat === 'all') || (item.c === activeCat);
+    const matchSearch = !searchQuery || 
+      item.t.toLowerCase().includes(searchQuery) ||
+      item.p.toLowerCase().includes(searchQuery) ||
+      item.s.toLowerCase().includes(searchQuery);
+    return matchCat && matchSearch;
+  });
+
+  document.getElementById('liveCount').innerText = `${filtered.length} / ${issues.length} shown`;
+
+  if(filtered.length === 0){
+    main.innerHTML = '';
+    noRes.style.display = 'block';
+    return;
+  }
+  noRes.style.display = 'none';
+
+  let html = '';
+  categories.forEach(cat => {
+    if(activeCat !== 'all' && activeCat !== cat.id) return;
+
+    const catIssues = filtered.filter(i => i.c === cat.id);
+    if(catIssues.length === 0) return;
+
+    html += `
+    <section class="cat-section" style="--cat-color:${cat.color}">
+      <div class="cat-head">
+        <span class="range">${cat.range}</span>
+        <h2>${cat.name}</h2>
+        <span class
