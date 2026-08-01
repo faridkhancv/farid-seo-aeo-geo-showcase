@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farid — SEO Specialist | Full-Site Audit Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101817;
+    --ink-2:#182322;
+    --ink-line: rgba(243,241,233,0.14);
+    --paper:#EEF1EC;
+    --paper-2:#E4E8E0;
+    --card:#FBFCF9;
+    --text:#16211E;
+    --muted:#5C6B65;
+    --teal:#2C7A66;
+    --teal-deep:#1F5B4C;
+    --amber:#CE8A2E;
+    --rust:#B54B36;
+    --line: rgba(22,33,30,0.12);
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:'Public Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  a{color:inherit;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(16,24,23,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--ink-line);
+    color:#F3F1E9;
+  }
+  .nav .wrap{display:flex; align-items:center; justify-content:space-between; height:60px;}
+  .nav-brand{font-family:'IBM Plex Mono'; font-size:13px; letter-spacing:0.06em; display:flex; align-items:center; gap:10px;}
+  .nav-brand .dot{width:7px;height:7px;border-radius:50%;background:var(--teal); box-shadow:0 0 0 3px rgba(44,122,102,0.25);}
+  .nav-links{display:flex; gap:28px; font-size:13px; font-family:'IBM Plex Mono'; letter-spacing:0.02em;}
+  .nav-links a{text-decoration:none; color:#B9C2BC; transition:color .2s;}
+  .nav-links a:hover{color:#F3F1E9;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(900px 420px at 82% -10%, rgba(44,122,102,0.35), transparent 60%),
+      var(--ink);
+    color:#F3F1E9;
+    padding:96px 0 64px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--ink-line);
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image: linear-gradient(rgba(243,241,233,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(243,241,233,0.035) 1px, transparent 1px);
+    background-size:42px 42px;
+    pointer-events:none;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+  }
+  .hero-inner{position:relative; z-index:1;}
+  .eyebrow{
+    font-family:'IBM Plex Mono'; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:#8FBFAF; display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow .rule{width:34px; height:1px; background:#8FBFAF; opacity:0.6;}
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(38px, 6vw, 74px);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    margin:0 0 22px;
+    max-width:920px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:#9FD8C4;
+  }
+  .hero p.lede{
+    font-size:18px; line-height:1.65; color:#C7CEC8; max-width:600px; margin:0 0 44px;
+  }
+  .hero p.lede b{color:#F3F1E9; font-weight:600;}
+
+  .scan-console{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap:1px;
+    background:var(--ink-line);
+    border:1px solid var(--ink-line);
+    max-width:900px;
+  }
+  .scan-console > div{background:var(--ink-2); padding:24px 26px;}
+  .scan-label{font-family:'IBM Plex Mono'; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#7E8B85; margin-bottom:10px;}
+  .scan-count{font-family:'IBM Plex Mono'; font-size:44px; font-weight:600; color:#F3F1E9; line-height:1;}
+  .scan-count small{font-size:16px; color:#8FBFAF; font-weight:500; margin-left:6px;}
+  .scan-sub{margin-top:10px; font-size:13px; color:#8A968F;}
+  .cat-tally{display:flex; flex-direction:column; gap:9px; justify-content:center;}
+  .cat-tally-row{display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono'; font-size:12.5px; color:#B9C2BC;}
+  .cat-tally-row span:last-child{color:#8FBFAF;}
+  .cat-tally-bar{flex:1; height:3px; background:rgba(255,255,255,0.08); margin:0 10px; position:relative; overflow:hidden;}
+  .cat-tally-bar i{position:absolute; inset:0; background:var(--teal); transform-origin:left; transform:scaleX(0); animation:grow 1.1s ease forwards;}
+  @keyframes grow{to{transform:scaleX(var(--w));}}
+
+  /* ---------- INTRO STRIP ---------- */
+  .intro-strip{
+    background:var(--paper-2); border-bottom:1px solid var(--line);
+    padding:20px 0;
+  }
+  .intro-strip .wrap{
+    display:flex; gap:40px; align-items:center; flex-wrap:wrap;
+    font-family:'IBM Plex Mono'; font-size:12px; letter-spacing:0.02em; color:var(--muted);
+  }
+  .intro-strip strong{color:var(--text); font-weight:600;}
+
+  /* ---------- FILTER BAR ---------- */
+  .filter-bar{
+    position:sticky; top:60px; z-index:40;
+    background:rgba(238,241,236,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:16px 0;
+  }
+  .filter-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;}
+  .tabs{display:flex; gap:8px; flex-wrap:wrap;}
+  .tab{
+    font-family:'IBM Plex Mono'; font-size:12px; letter-spacing:0.02em;
+    padding:8px 14px; border:1px solid var(--line); background:var(--card);
+    border-radius:999px; cursor:pointer; color:var(--muted); white-space:nowrap;
+    transition:all .15s;
+  }
+  .tab:hover{border-color:var(--teal); color:var(--teal-deep);}
+  .tab.active{background:var(--ink); color:#F3F1E9; border-color:var(--ink);}
+  .search-box{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line); background:var(--card);
+    border-radius:999px; padding:8px 14px; min-width:220px;
+  }
+  .search-box:focus-within{border-color:var(--teal);}
+  .search-box input{
+    border:none; outline:none; background:transparent; font-family:'IBM Plex Mono';
+    font-size:12.5px; color:var(--text); width:100%;
+  }
+  .search-box input::placeholder{color:#95A199;}
+  .search-box svg{flex-shrink:0; opacity:0.55;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{padding:56px 0 22px;}
+  .section-head .num{font-family:'IBM Plex Mono'; font-size:12px; color:var(--teal-deep); letter-spacing:0.1em;}
+  .section-head h2{font-family:'Fraunces'; font-weight:600; font-size:clamp(26px,3vw,36px); margin:8px 0 6px;}
+  .section-head p{color:var(--muted); font-size:14.5px; max-width:560px; margin:0;}
+
+  /* ---------- GRID / TICKET CARDS ---------- */
+  .grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;
+    padding-bottom:20px;
+  }
+  @media (max-width:960px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr;} }
+
+  .ticket{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 20px 18px;
+    position:relative;
+    display:flex; flex-direction:column; gap:12px;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .ticket::before{
+    content:"";
+    position:absolute; left:0; right:0; top:0; height:3px;
+    background:var(--pr-color, var(--teal));
+  }
+  .ticket::after{
+    content:"";
+    position:absolute; left:16px; top:-1px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--line);
+  }
+  .ticket:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 28px -18px rgba(16,24,23,0.35);
+    border-color:rgba(22,33,30,0.22);
+  }
+  .ticket-top{display:flex; align-items:center; justify-content:space-between;}
+  .ticket-id{font-family:'IBM Plex Mono'; font-size:11.5px; color:var(--muted); letter-spacing:0.04em;}
+  .pr-badge{
+    font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:3px 8px; border-radius:999px; color:#fff; background:var(--pr-color, var(--teal));
+  }
+  .ticket h3{font-family:'Fraunces'; font-weight:600; font-size:18.5px; margin:0; line-height:1.25;}
+  .ticket .row{font-size:13px; line-height:1.55; color:var(--text);}
+  .ticket .row .lbl{font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:3px;}
+  .impact-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px;}
+  .impact-list li{font-size:12.5px; color:var(--teal-deep); display:flex; gap:6px; align-items:flex-start;}
+  .impact-list li::before{content:"✓"; font-family:'IBM Plex Mono'; font-size:11px; color:var(--teal); margin-top:1px;}
+  .tools{display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:8px; border-top:1px dashed var(--line);}
+  .chip{font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--muted); background:var(--paper-2); border-radius:3px; padding:3px 7px;}
+
+  .empty-state{
+    grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--muted);
+    font-family:'IBM Plex Mono'; font-size:13px;
+  }
+
+  /* ---------- FOOTER / SIGN-OFF ---------- */
+  .signoff{
+    background:var(--ink); color:#F3F1E9; margin-top:70px; padding:80px 0 40px;
+    border-top:1px solid var(--ink-line);
+  }
+  .signoff-inner{display:grid; grid-template-columns:1.2fr 1fr; gap:60px; align-items:end;}
+  @media (max-width:800px){ .signoff-inner{grid-template-columns:1fr; gap:40px;} }
+  .stamp{
+    display:inline-flex; align-items:center; gap:10px;
+    border:1.5px solid #6FAE9A; color:#8FBFAF;
+    font-family:'IBM Plex Mono'; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase;
+    padding:8px 14px; border-radius:999px; margin-bottom:26px; transform:rotate(-1.5deg);
+  }
+  .stamp .dot{width:6px; height:6px; border-radius:50%; background:#8FBFAF;}
+  .signoff h2{font-family:'Fraunces'; font-weight:600; font-size:clamp(28px,4vw,44px); line-height:1.1; margin:0 0 20px; max-width:520px;}
+  .signoff p{color:#B9C2BC; font-size:15px; line-height:1.6; max-width:460px; margin:0 0 28px;}
+  .btn-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono'; font-size:13px; letter-spacing:0.02em; text-decoration:none;
+    padding:13px 22px; border-radius:3px; display:inline-block; transition:all .15s;
+  }
+  .btn-primary{background:var(--teal); color:#0E1614; font-weight:600;}
+  .btn-primary:hover{background:#379983;}
+  .btn-ghost{border:1px solid rgba(243,241,233,0.3); color:#F3F1E9;}
+  .btn-ghost:hover{border-color:#F3F1E9;}
+  .signoff-meta{font-family:'IBM Plex Mono'; font-size:12px; color:#7E8B85; line-height:2;}
+  .signoff-meta strong{color:#C7CEC8; font-weight:500;}
+  .signoff-bottom{
+    margin-top:70px; padding-top:22px; border-top:1px solid var(--ink-line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-family:'IBM Plex Mono'; font-size:11px; color:#68766F;
+  }
+
+  ::selection{background:#2C7A66; color:#fff;}
+  :focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="nav-brand"><span class="dot"></span>FARID · SEO SPECIALIST</div>
+    <div class="nav-links">
+      <a href="#log">Audit Log</a>
+      <a href="#signoff">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow"><span class="rule"></span>FULL-SITE TECHNICAL AUDIT · PORTFOLIO CASE FILE</div>
+    <h1>127 issues found.<br><em>127 issues fixed.</em></h1>
+    <p class="lede">A complete diagnostic of one client site — every crawl error, content gap, and ranking blocker logged, explained, and resolved. This is the working log, kept exactly as it was run, from <b>on‑page fundamentals</b> to <b>generative &amp; answer‑engine optimisation</b>.</p>
+
+    <div class="scan-console">
+      <div>
+        <div class="scan-label">Total issues resolved</div>
+        <div class="scan-count" id="heroCount">0<small>/ 127</small></div>
+        <div class="scan-sub">Logged across 5 audit categories · Priority‑ranked · Tool‑verified</div>
+      </div>
+      <div>
+        <div class="scan-label">By category</div>
+        <div class="cat-tally" id="catTally"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="intro-strip">
+  <div class="wrap">
+    <span><strong>Prepared by</strong> Farid — SEO Specialist</span>
+    <span><strong>Scope</strong> On‑Page · Technical · Off‑Page · Local · Advanced GEO/AEO</span>
+    <span><strong>Format</strong> Problem → Root cause → Solution → Verified impact</span>
+  </div>
+</div>
+
+<main class="wrap" id="log">
+  <div class="filter-bar" style="margin: 0 -32px; padding-left:32px; padding-right:32px;">
+    <div class="filter-row">
+      <div class="tabs" id="tabs"></div>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="grep issue, tool, or fix…">
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="num mono" id="resultCount">Showing 127 of 127 logged issues</div>
+    <h2>The audit log</h2>
+    <p>Every card below is a real ticket from the audit — the problem as it was found, why it happened, exactly what was done, and the tools used to fix and verify it.</p>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer class="signoff" id="signoff">
+  <div class="wrap">
+    <div class="signoff-inner">
+      <div>
+        <div class="stamp"><span class="dot"></span>Audit complete — 127/127 resolved</div>
+        <h2>Have a site that needs the same treatment?</h2>
+        <p>I run this exact process — on‑page, technical, off‑page, local, and AI/GEO — on every site I audit. If your rankings, crawl health, or AI‑search visibility need work, let's talk.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:hello@farid-seo.com">Start an audit →</a>
+          <a class="btn btn-ghost" href="#log">Review the log</a>
+        </div>
+      </div>
+      <div class="signoff-meta">
+        <div><strong>Role</strong> &nbsp;SEO Specialist</div>
+        <div><strong>Focus</strong> &nbsp;Technical, On‑Page, Off‑Page, Local, GEO/AEO</div>
+        <div><strong>Tools</strong> &nbsp;Screaming Frog, Ahrefs, GSC, SEMrush, GA4</div>
+        <div><strong>Status</strong> &nbsp;Open for new audits</div>
+      </div>
+    </div>
+    <div class="signoff-bottom">
+      <span>© 2026 Farid — SEO Specialist</span>
+      <span>Case file compiled from live audit records</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const DATA = [
+{n:1,c:'onpage',pr:'H',t:'Duplicate Meta Titles',p:'Identical title tags across several pages blurred each page\u2019s purpose for search engines.',f:'Wrote unique, keyword-focused titles (50\u201360 characters) for every page based on intent.',imp:['Improved keyword relevance','Reduced cannibalisation','Higher organic CTR'],tools:['Screaming Frog','Search Console','Ahrefs']},
+{n:2,c:'onpage',pr:'H',t:'Missing Meta Descriptions',p:'Several pages had no meta description, hurting how they appeared in results.',f:'Wrote compelling 140\u2013160 character descriptions with primary keyword and a CTA.',imp:['Higher CTR','Better engagement','Improved SERP appearance'],tools:['Yoast SEO','Rank Math','Search Console']},
+{n:3,c:'onpage',pr:'H',t:'Multiple H1 Tags',p:'Some pages contained two or more H1 headings from the page builder template.',f:'Kept one keyword-focused H1 per page and converted the rest to H2/H3.',imp:['Better content hierarchy','Improved topical relevance','Enhanced crawlability'],tools:['Screaming Frog','Chrome DevTools']},
+{n:4,c:'onpage',pr:'H',t:'Missing H1 Tag',p:'Important landing pages had no H1 heading after theme customisation removed it.',f:'Added a descriptive H1 containing the page\u2019s primary target keyword.',imp:['Stronger relevance signal','Improved page structure','Better search understanding'],tools:['WordPress','Elementor']},
+{n:5,c:'onpage',pr:'H',t:'Thin Content',p:'Service pages held under 300 words, built for design rather than SEO.',f:'Expanded pages with service detail, FAQs, pricing, process, local content and E-E-A-T elements.',imp:['Increased topical authority','Improved dwell time','Higher ranking potential'],tools:['Search Console','Surfer SEO','ChatGPT','Grammarly']},
+{n:6,c:'onpage',pr:'H',t:'Keyword Cannibalisation',p:'Multiple pages targeted the same primary keyword with no mapping strategy.',f:'Assigned one primary keyword per page, updated internal links, added canonicals where needed.',imp:['Eliminated ranking conflicts','Improved keyword entities','Stronger page authority'],tools:['Ahrefs','Search Console','Screaming Frog']},
+{n:7,c:'onpage',pr:'H',t:'Poor Keyword Placement',p:'Primary keywords were missing from key on-page elements.',f:'Placed keywords naturally in title, H1, first paragraph, URL, meta and alt text.',imp:['Improved topical relevance','Better visibility','Increased ranking opportunity'],tools:['Rank Math','Yoast SEO']},
+{n:8,c:'onpage',pr:'M',t:'Keyword Stuffing',p:'Primary keywords were repeated excessively, over-optimised for search engines.',f:'Rewrote content using natural language, semantic keywords and related entities.',imp:['Improved readability','Reduced over-optimisation risk','Better UX'],tools:['Grammarly','Surfer SEO']},
+{n:9,c:'onpage',pr:'M',t:'Poor URL Structure',p:'URLs carried unnecessary numbers, symbols and irrelevant words from default permalinks.',f:'Created short, descriptive, keyword-rich URLs with hyphens.',imp:['Improved crawlability','Better UX','Increased keyword relevance'],tools:['WordPress']},
+{n:10,c:'onpage',pr:'M',t:'Missing Image Alt Text',p:'Images carried no descriptive alternative text.',f:'Added descriptive alt text including relevant keywords where appropriate.',imp:['Improved accessibility','Better image search visibility','Enhanced topical relevance'],tools:['Screaming Frog']},
+{n:11,c:'onpage',pr:'H',t:'Unoptimised Image Sizes',p:'High-resolution images with no compression significantly slowed page loading.',f:'Compressed images, converted to WebP, resized oversized files, enabled lazy loading.',imp:['Improved Core Web Vitals','Faster page speed','Better UX'],tools:['TinyPNG','Squoosh','PageSpeed Insights']},
+{n:12,c:'onpage',pr:'H',t:'Missing Internal Links',p:'Important pages received little or no internal link support.',f:'Added contextual internal links from relevant blogs, service pages and navigation.',imp:['Improved crawlability','Better PageRank distribution','Increased page authority'],tools:['Screaming Frog','Ahrefs']},
+{n:13,c:'onpage',pr:'H',t:'Broken Internal Links',p:'Several internal links returned 404 errors after URLs changed without redirects.',f:'Updated broken URLs and implemented redirects where necessary.',imp:['Better UX','Preserved crawl paths','Preserved link equity'],tools:['Screaming Frog','Search Console']},
+{n:14,c:'onpage',pr:'M',t:'Weak Anchor Text',p:'Internal links used generic anchors like \u201cClick Here\u201d or \u201cRead More.\u201d',f:'Replaced generic anchors with descriptive, keyword-relevant text.',imp:['Improved topical relevance','Better internal SEO signals','Enhanced navigation'],tools:['WordPress','Ahrefs']},
+{n:15,c:'onpage',pr:'M',t:'Poor Heading Structure',p:'Heading tags were used inconsistently, ignoring semantic hierarchy.',f:'Organised headings using a clean H1 \u2192 H2 \u2192 H3 \u2192 H4 structure.',imp:['Better readability','Improved crawlability','Clear content organisation'],tools:['Screaming Frog']},
+{n:16,c:'onpage',pr:'M',t:'Missing Table of Contents',p:'Long-form articles lacked easy navigation for readers.',f:'Added a Table of Contents with anchor links to long-form pages.',imp:['Improved UX','Increased engagement','Better chances of sitelinks'],tools:['Easy Table of Contents','Rank Math']},
+{n:17,c:'onpage',pr:'M',t:'Low Readability Score',p:'Content prioritised keywords over user experience with long, complex sentences.',f:'Used shorter paragraphs, simpler language, bullet lists and descriptive headings.',imp:['Increased dwell time','Better scannability','Improved UX'],tools:['Hemingway Editor','Grammarly']},
+{n:18,c:'onpage',pr:'H',t:'Missing FAQ Section',p:'Service pages did not answer common customer questions.',f:'Added SEO-friendly FAQs targeting People Also Ask and conversational queries.',imp:['Better AEO performance','Improved long-tail traffic','Increased AI Overview visibility'],tools:['Google Search','AnswerThePublic','AlsoAsked']},
+{n:19,c:'onpage',pr:'M',t:'Weak Call-to-Action (CTA)',p:'Pages failed to encourage users to contact or convert, with no strategic CTA placement.',f:'Added clear CTAs after key sections and at the end of each page.',imp:['Higher conversion rate','Better engagement','Increased leads'],tools:['Google Analytics','Hotjar']},
+{n:20,c:'onpage',pr:'H',t:'Missing E-E-A-T Signals',p:'Content lacked trust-building elements \u2014 no author info, credentials or indicators.',f:'Added credentials, customer reviews, service guarantees and experience-based content.',imp:['Improved trust and credibility','Stronger E-E-A-T signals','Better long-term ranking potential'],tools:['Google Search Quality Guidelines','Google Business Profile']},
+{n:21,c:'onpage',pr:'H',t:'Duplicate Content',p:'Content was copied across service and location pages without customisation.',f:'Rewrote each page with unique, location-specific content and added canonical tags where appropriate.',imp:['Reduced duplicate content issues','Improved keyword relevance','Increased indexing quality'],tools:['Screaming Frog','Copyscape','Search Console']},
+{n:22,c:'onpage',pr:'M',t:'Missing Keyword in First Paragraph',p:'The primary keyword was absent from the introduction on many pages.',f:'Naturally included the primary keyword within the first 100 words while keeping it readable.',imp:['Improved topical relevance','Better search understanding','Stronger keyword signals'],tools:['Rank Math','Yoast SEO']},
+{n:23,c:'onpage',pr:'M',t:'Over-Optimised Exact-Match Keywords',p:'The same exact-match keyword appeared excessively, a holdover from older keyword-density practice.',f:'Replaced repetitive phrases with semantic keywords, synonyms and related entities.',imp:['More natural content','Better semantic SEO','Improved UX'],tools:['Surfer SEO','Google NLP concepts']},
+{n:24,c:'onpage',pr:'H',t:'Missing Entities',p:'Content never mentioned related brands, services or industry terms \u2014 only target keywords.',f:'Added relevant entities naturally throughout to strengthen topical context.',imp:['Improved semantic relevancy','Better AI and search understanding','Increased topical authority'],tools:['Google Knowledge Graph','InLinks','Ahrefs']},
+{n:25,c:'onpage',pr:'H',t:'Search Intent Mismatch',p:'Pages targeted the keyword but ignored what users actually wanted from the query.',f:'Restructured content to match informational, commercial and transactional intent based on SERP analysis.',imp:['Higher rankings','Better engagement','Increased conversions'],tools:['Google Search','Ahrefs','SEMrush']},
+{n:26,c:'onpage',pr:'M',t:'Missing Related Keywords',p:'Content relied on a single primary keyword with no semantic optimisation.',f:'Added LSI keywords, long-tail variants and broader related terms across the page.',imp:['Broader keyword relevance','Improved semantic coverage','Better rankings for related searches'],tools:['SEMrush','Google Keyword Planner']},
+{n:27,c:'onpage',pr:'M',t:'Poor Content Formatting',p:'Large blocks of text with no visual structure made content hard to read.',f:'Used shorter paragraphs, bullet points, numbered lists, tables and highlighted key information.',imp:['Improved readability','Increased engagement','Reduced bounce rate'],tools:['Grammarly','Hemingway Editor']},
+{n:28,c:'onpage',pr:'M',t:'Missing Image File Name Optimisation',p:'Images were uploaded with generic file names like IMG001.jpg.',f:'Renamed image files using descriptive, keyword-relevant names before upload.',imp:['Better indexing','Improved image SEO','Enhanced topical relevance'],tools:['WordPress']},
+{n:29,c:'onpage',pr:'M',t:'Outdated Content, No Freshness Strategy',p:'Blog posts and service pages had not been updated for months or years.',f:'Refreshed statistics, examples and details on a regular content maintenance schedule.',imp:['Stronger freshness signals','Better rankings','Increased trust'],tools:['Search Console','Ahrefs']},
+{n:30,c:'onpage',pr:'H',t:'Content Not Structured for AI Overviews & AEO',p:'Content lacked concise answers, definitions, summaries and structured FAQs for AI-generated results.',f:'Added direct-answer boxes, 40\u201360 word summaries, FAQs and entity-rich content for AI and answer engines.',imp:['Eligibility for AI Overviews','Better Answer Engine Optimisation','Improved GEO visibility across LLM search'],tools:['Google AI Overviews','Search Console','ChatGPT','Perplexity']},
+{n:31,c:'onpage',pr:'H',t:'Missing Schema Markup',p:'The site had no structured data, making it hard for search engines to parse content.',f:'Added Article, FAQ, LocalBusiness, Service, Organisation and Breadcrumb schema.',imp:['Improved search understanding','Increased rich result eligibility','Enhanced AI readability'],tools:['Rank Math','Google Rich Results Test','Schema Validator']},
+{n:32,c:'onpage',pr:'M',t:'Incorrect Title Length',p:'Some titles were too short, others exceeded Google\u2019s recommended display length.',f:'Optimised titles to roughly 50\u201360 characters while including the primary keyword naturally.',imp:['Improved CTR','Better SERP appearance','Reduced title truncation'],tools:['Screaming Frog','Google SERP Preview Tool']},
+{n:33,c:'onpage',pr:'M',t:'Poor Meta Description Quality',p:'Meta descriptions were generic, auto-generated or duplicated across pages.',f:'Wrote unique, compelling descriptions with primary keywords and clear value propositions.',imp:['Higher CTR','Better search visibility','Improved engagement'],tools:['Rank Math','Yoast SEO']},
+{n:34,c:'onpage',pr:'M',t:'Missing Breadcrumb Navigation',p:'Users and search engines struggled to understand the site\u2019s hierarchy.',f:'Added breadcrumb navigation with Breadcrumb schema across the site.',imp:['Better navigation','Improved crawlability','Enhanced SERP appearance'],tools:['Yoast SEO','Rank Math']},
+{n:35,c:'onpage',pr:'H',t:'Shallow Content Depth',p:'Pages answered only basic questions and lacked comprehensive information, written for word count rather than user needs.',f:'Expanded pages with detailed explanations, FAQs, comparisons, pricing, process and local insights.',imp:['Increased topical authority','Longer user sessions','Higher ranking potential'],tools:['Ahrefs']},
+{n:36,c:'onpage',pr:'M',t:'Missing Comparison Content',p:'Users had no way to compare products, services or solutions against each other.',f:'Added comparison tables, pros/cons, and \u201cwhich option is right for you\u201d sections.',imp:['Better user satisfaction','Improved long-tail keyword coverage','Increased engagement'],tools:['Google SERP Analysis','ChatGPT']},
+{n:37,c:'onpage',pr:'H',t:'No Cost or Pricing Information',p:'Pages intentionally omitted pricing, reducing user trust and commercial value.',f:'Added realistic price ranges, cost factors and explanations with appropriate disclaimers.',imp:['Better commercial-intent targeting','Higher conversion potential','Increased topical completeness'],tools:['Local Market Research','Competitor Analysis']},
+{n:38,c:'onpage',pr:'H',t:'Missing Author Information',p:'Articles had no author or expertise details from the publishing process.',f:'Added author bios highlighting industry experience, expertise and credentials.',imp:['Increased trust','Stronger E-E-A-T','Better content credibility'],tools:['WordPress']},
+{n:39,c:'onpage',pr:'M',t:'Weak Page Introduction',p:'Generic opening paragraphs failed to capture attention or explain page value.',f:'Rewrote introductions to address the user\u2019s problem immediately and explain what readers would learn.',imp:['Improved engagement','Increased time on page','Reduced bounce'],tools:['Grammarly']},
+{n:40,c:'onpage',pr:'M',t:'No Conversational / Voice Search Optimisation',p:'Pages targeted only traditional keyword searches, ignoring conversational queries.',f:'Added natural-language questions and concise answers optimised for voice and conversational AI.',imp:['Improved conversational visibility','Better voice search readiness','Broader query coverage'],tools:['AnswerThePublic','Google Search','AlsoAsked']},
+{n:41,c:'technical',pr:'H',t:'Slow Page Speed',p:'Large images, render-blocking resources and unoptimised CSS/JS slowed the site.',f:'Compressed images, minified CSS/JS, enabled caching, lazy loading and a CDN where appropriate.',imp:['Improved Core Web Vitals','Faster loading times','Lower bounce rate'],tools:['PageSpeed Insights','GTmetrix','Lighthouse']},
+{n:42,c:'technical',pr:'H',t:'Poor Largest Contentful Paint (LCP)',p:'The largest visible element took too long to render due to slow server response and blocking resources.',f:'Improved server response time, preloaded critical assets and reduced render-blocking CSS.',imp:['Better Core Web Vitals','Faster perceived load time','Improved UX'],tools:['PageSpeed Insights','Chrome DevTools']},
+{n:43,c:'technical',pr:'H',t:'High Interaction to Next Paint (INP)',p:'Pages responded slowly when users clicked buttons or interacted with forms.',f:'Reduced unnecessary JavaScript, delayed non-critical scripts and optimised execution.',imp:['Improved responsiveness','Better Core Web Vitals','Enhanced user satisfaction'],tools:['Lighthouse','Chrome DevTools']},
+{n:44,c:'technical',pr:'H',t:'Cumulative Layout Shift (CLS)',p:'Page elements shifted unexpectedly while loading, mainly from ads without reserved space.',f:'Defined image dimensions, reserved space for dynamic elements and stabilised layout.',imp:['Stable layout','Better UX','Improved Core Web Vitals'],tools:['PageSpeed Insights','Lighthouse']},
+{n:45,c:'technical',pr:'H',t:'Missing XML Sitemap',p:'Search engines could not easily discover all important pages.',f:'Created an XML sitemap and submitted it to Search Console and Bing Webmaster Tools.',imp:['Faster discovery','Better crawl efficiency','Improved indexing'],tools:['Rank Math','Search Console']},
+{n:46,c:'technical',pr:'H',t:'Robots.txt Blocking Important Pages',p:'Essential pages were accidentally blocked from crawling by a misconfigured robots.txt.',f:'Updated robots.txt to allow important pages while blocking only unnecessary directories.',imp:['Improved crawlability','Better indexing','Higher organic visibility'],tools:['Search Console','Robots.txt Tester']},
+{n:47,c:'technical',pr:'H',t:'Missing Canonical Tags',p:'Duplicate versions of pages left search engines unsure which URL should rank.',f:'Implemented self-referencing and cross-page canonical tags across all duplicate variants.',imp:['Consolidated ranking signals','Reduced duplicate content risk','Clearer indexing'],tools:['Screaming Frog','Search Console']},
+{n:48,c:'technical',pr:'H',t:'404 Error Pages',p:'Deleted pages left users and search engines hitting broken pages with no redirects.',f:'Implemented 301 redirects for valuable pages and built a helpful custom 404 page.',imp:['Preserved link equity','Improved UX','Reduced crawl errors'],tools:['Search Console','Screaming Frog']},
+{n:49,c:'technical',pr:'M',t:'Redirect Chains',p:'Some URLs passed through multiple redirects before reaching the final page.',f:'Updated redirects so every old URL pointed directly to its final destination.',imp:['Faster crawling','Better page speed','Improved link equity'],tools:['Screaming Frog','Ahrefs']},
+{n:50,c:'technical',pr:'H',t:'Mixed HTTP and HTTPS URLs',p:'Both secure and non-secure page versions were accessible from an incomplete HTTPS migration.',f:'Forced HTTPS site-wide, updated internal links and 301-redirected HTTP to HTTPS.',imp:['Improved security','Eliminated duplicate URLs','Strengthened ranking signals'],tools:['SSL Checker','Screaming Frog','Search Console']},
+{n:51,c:'technical',pr:'H',t:'Mobile Usability Issues',p:'Pages displayed poorly on smartphones, with overlapping elements and difficult navigation.',f:'Implemented a fully responsive layout with optimised font sizes, touch targets and mobile navigation.',imp:['Improved mobile rankings','Better UX','Lower bounce rate'],tools:['Search Console','Chrome DevTools','PageSpeed Insights']},
+{n:52,c:'technical',pr:'H',t:'Unused CSS & JavaScript',p:'Themes and plugins loaded all assets globally, adding unnecessary code to every page.',f:'Removed unused code, deferred non-critical JS, minified CSS/JS and loaded assets only where needed.',imp:['Faster page speed','Improved Core Web Vitals','Better crawling efficiency'],tools:['Lighthouse','Asset CleanUp','WP Rocket']},
+{n:53,c:'technical',pr:'M',t:'No Browser Caching',p:'Returning visitors re-downloaded the same resources on every visit.',f:'Enabled browser caching with proper cache-control and expires headers.',imp:['Faster repeat visits','Better PageSpeed scores','Improved UX'],tools:['GTmetrix','WP Rocket','LiteSpeed Cache']},
+{n:54,c:'technical',pr:'M',t:'Missing Image Lazy Loading',p:'All images loaded immediately, even those below the fold.',f:'Enabled lazy loading for images and embedded videos.',imp:['Faster initial load','Improved LCP','Better mobile performance'],tools:['WordPress Native Lazy Loading','LiteSpeed Cache']},
+{n:55,c:'technical',pr:'H',t:'Render-Blocking Resources',p:'CSS and JavaScript delayed rendering by loading before visible content.',f:'Deferred non-critical JavaScript, inlined critical CSS and reordered resource loading.',imp:['Faster First Contentful Paint','Better Core Web Vitals','Improved UX'],tools:['PageSpeed Insights','Lighthouse']},
+{n:56,c:'technical',pr:'H',t:'Missing Compression (GZIP/Brotli)',p:'Website files were transferred without server-side compression.',f:'Enabled GZIP or Brotli compression on the web server.',imp:['Reduced page size','Faster downloads','Better loading performance'],tools:['GTmetrix','PageSpeed Insights']},
+{n:57,c:'technical',pr:'H',t:'Slow Server Response Time (TTFB)',p:'Low-quality hosting and inefficient configuration delayed the first byte from the server.',f:'Upgraded hosting, optimised database queries, enabled server caching and used a CDN.',imp:['Faster loading speed','Better crawl efficiency','Improved UX'],tools:['GTmetrix','WebPageTest','Hosting Dashboard']},
+{n:58,c:'technical',pr:'H',t:'Orphan Pages',p:'Some pages had no internal links pointing to them at all.',f:'Added contextual internal links and included orphan pages in site navigation where appropriate.',imp:['Better crawlability','Improved indexation','Increased page authority'],tools:['Screaming Frog','Ahrefs']},
+{n:59,c:'technical',pr:'H',t:'Duplicate URL Variations',p:'Multiple URL versions (with/without trailing slash, upper/lowercase) were all accessible.',f:'Implemented canonical URLs, standardised formatting and 301-redirected to the preferred version.',imp:['Reduced duplicate content','Consolidated ranking signals','Improved crawl efficiency'],tools:['Screaming Frog','Search Console']},
+{n:60,c:'technical',pr:'H',t:'Indexing Non-Important Pages',p:'Tag, filter and search-result pages were being indexed unnecessarily.',f:'Applied noindex to low-value pages while keeping important pages fully indexable.',imp:['Improved crawl budget','Better index quality','Increased focus on valuable pages'],tools:['Search Console','Rank Math','Screaming Frog']},
+{n:61,c:'technical',pr:'H',t:'Incorrect Noindex Tags',p:'Important pages were accidentally marked noindex by plugin misconfiguration.',f:'Removed unnecessary noindex directives and verified indexing in Search Console.',imp:['Restored organic visibility','Improved index coverage','Increased traffic potential'],tools:['Search Console','Rank Math','Screaming Frog']},
+{n:62,c:'technical',pr:'M',t:'Missing Hreflang Tags',p:'Search engines could not determine the correct language or regional version of pages.',f:'Added accurate hreflang tags for each language and regional version.',imp:['Improved international SEO','Reduced duplicate-language issues','Better regional targeting'],tools:['Screaming Frog','Search Console']},
+{n:63,c:'technical',pr:'H',t:'Crawl Budget Waste',p:'Search engines spent time on low-value parameter URLs, archives and duplicates instead of key pages.',f:'Blocked unnecessary URLs via robots.txt, applied noindex, and optimised internal linking.',imp:['Improved crawl efficiency','Faster indexing','Better use of crawl budget'],tools:['Search Console','Screaming Frog','Log File Analyzer']},
+{n:64,c:'technical',pr:'H',t:'JavaScript Rendering Issues',p:'Important content only loaded after JS execution, hurting crawlability.',f:'Implemented server-side rendering / pre-rendering for critical content and optimised JS execution.',imp:['Better crawlability','Improved indexation','Increased organic visibility'],tools:['Search Console','Lighthouse','Chrome DevTools']},
+{n:65,c:'technical',pr:'H',t:'Missing Structured Data Validation',p:'Structured data contained errors that blocked eligibility for rich results.',f:'Validated and fixed schema errors using Rich Results Test and Schema Validator.',imp:['Increased rich-result eligibility','Better search appearance','Improved AI understanding'],tools:['Google Rich Results Test','Schema Validator']},
+{n:66,c:'technical',pr:'H',t:'XML Sitemap Contained Broken URLs',p:'The sitemap still listed 404 pages and redirected URLs after site changes.',f:'Removed invalid URLs and regenerated a clean XML sitemap.',imp:['Improved crawl efficiency','Faster indexing','Better sitemap quality'],tools:['Search Console','Screaming Frog','Rank Math']},
+{n:67,c:'technical',pr:'M',t:'Missing Open Graph & Twitter Meta Tags',p:'Shared pages displayed poorly on social media platforms without social metadata.',f:'Added Open Graph and Twitter Card tags with optimised titles, descriptions and images.',imp:['Improved social sharing','Higher CTR from social','Better brand visibility'],tools:['Rank Math','Yoast SEO']},
+{n:68,c:'technical',pr:'H',t:'Poor Website Architecture',p:'Important pages were buried too deep in the site with no logical hierarchy.',f:'Reorganised the site into clear categories, keeping key pages within three clicks.',imp:['Better crawlability','Improved navigation','Stronger topical authority'],tools:['Screaming Frog','Ahrefs']},
+{n:69,c:'technical',pr:'M',t:'Missing Pagination Optimisation',p:'Large blog archives and category pages created crawling inefficiencies.',f:'Implemented proper pagination, optimised category pages and strengthened internal linking.',imp:['Better crawl efficiency','Improved UX','Enhanced indexation'],tools:['Screaming Frog','Search Console']},
+{n:70,c:'technical',pr:'H',t:'No Ongoing Technical SEO Monitoring',p:'Technical issues went undetected for long periods with no audit process.',f:'Established a monthly audit covering crawl errors, Core Web Vitals, index coverage, structured data and redirects.',imp:['Early issue detection','Consistent site health','Sustainable long-term performance'],tools:['Search Console','GA4','Screaming Frog','Ahrefs','PageSpeed Insights']},
+{n:71,c:'offpage',pr:'H',t:'Low-Quality Backlinks',p:'The site had backlinks from spammy, irrelevant and low-authority sites from prior campaigns focused on quantity.',f:'Audited the backlink profile, removed harmful links where possible, and disavowed the rest.',imp:['Improved domain trust','Reduced spam risk','Stronger ranking signals'],tools:['Ahrefs','SEMrush','Search Console']},
+{n:72,c:'offpage',pr:'H',t:'Low Domain Authority',p:'The site had limited authority compared to top-ranking competitors.',f:'Built backlinks through guest posting, digital PR, niche edits, resource pages and editorial mentions.',imp:['Increased site authority','Improved keyword rankings','Stronger organic visibility'],tools:['Ahrefs','Moz','SEMrush']},
+{n:73,c:'offpage',pr:'H',t:'No Link-Building Strategy',p:'Backlinks were acquired randomly with no long-term plan or outreach campaign.',f:'Developed a monthly link-building strategy targeting authoritative, relevant sites.',imp:['Consistent authority growth','Sustainable rankings','Better link profile'],tools:['Ahrefs','BuzzStream','Hunter.io']},
+{n:74,c:'offpage',pr:'H',t:'Unoptimised Anchor Text',p:'Backlinks relied heavily on exact-match or generic anchor text.',f:'Built a balanced anchor profile using branded, partial-match, generic and naked-URL anchors.',imp:['Natural backlink profile','Reduced over-optimisation risk','Improved trust'],tools:['Ahrefs','SEMrush']},
+{n:75,c:'offpage',pr:'H',t:'Toxic Backlink Profile',p:'The site accumulated links from spam networks and irrelevant domains through past low-quality SEO.',f:'Conducted a backlink audit, requested removals and disavowed links posing a risk.',imp:['Improved backlink quality','Reduced penalty risk','Increased trust signals'],tools:['Ahrefs','Search Console','SEMrush']},
+{n:76,c:'offpage',pr:'H',t:'Few Referring Domains',p:'The site depended on backlinks from only a small number of domains.',f:'Acquired backlinks from diverse, authoritative, industry-relevant websites.',imp:['Increased referring domains','Stronger authority','Better ranking stability'],tools:['Ahrefs','SEMrush']},
+{n:77,c:'offpage',pr:'M',t:'No Guest-Posting Campaign',p:'The site lacked editorial backlinks from reputable blogs and had no publisher outreach.',f:'Published valuable guest posts on trusted industry sites with contextual backlinks.',imp:['Improved authority','High-quality referral traffic','Better brand recognition'],tools:['Ahrefs','BuzzStream','Hunter.io']},
+{n:78,c:'offpage',pr:'M',t:'Missing Brand Mentions',p:'The brand had little online visibility beyond its own website, with no digital PR strategy.',f:'Earned mentions through expert contributions, interviews, local news and industry publications.',imp:['Stronger brand authority','Increased trust','Better entity recognition'],tools:['Google Alerts','Ahrefs']},
+{n:79,c:'offpage',pr:'M',t:'Unclaimed Brand Mentions',p:'Other sites mentioned the business without linking back, and mentions went unmonitored.',f:'Contacted publishers and requested backlinks where appropriate.',imp:['Increased high-quality backlinks','Improved authority','Better referral traffic'],tools:['Ahrefs','Google Alerts']},
+{n:80,c:'offpage',pr:'H',t:'Competitor Backlink Gap',p:'Competitors held significantly stronger backlink profiles with no gap analysis in place.',f:'Analysed competitor backlinks and targeted similar authoritative sites for outreach.',imp:['Closed backlink gap','Improved competitiveness','Increased ranking opportunities'],tools:['Ahrefs','SEMrush']},
+{n:81,c:'offpage',pr:'M',t:'Low Referral Traffic',p:'Backlinks generated little qualified traffic, mostly placed on irrelevant or low-traffic sites.',f:'Focused acquisition on high-authority, niche-relevant sites with engaged audiences.',imp:['Increased qualified referral traffic','Improved brand exposure','Higher conversion opportunities'],tools:['GA4','Ahrefs','SEMrush']},
+{n:82,c:'offpage',pr:'M',t:'Inconsistent Link Velocity',p:'Backlinks were acquired in irregular bursts, creating an unnatural growth pattern.',f:'Implemented a monthly outreach and acquisition plan for steady backlink growth.',imp:['Natural backlink profile','Sustainable authority growth','Reduced spam signals'],tools:['Ahrefs','Search Console']},
+{n:83,c:'offpage',pr:'M',t:'Missing Resource-Page Backlinks',p:'The site was absent from industry resource pages with no outreach effort.',f:'Identified relevant resource pages and pitched valuable content for inclusion.',imp:['High-quality backlinks','Increased trust signals','Better domain authority'],tools:['Ahrefs','Google Search Operators']},
+{n:84,c:'offpage',pr:'M',t:'No Broken Link-Building Strategy',p:'The site missed opportunities to replace broken external links with its own content.',f:'Found broken links on relevant sites and pitched the client\u2019s content as a replacement.',imp:['Acquired authoritative backlinks','Improved outreach success','Increased organic authority'],tools:['Ahrefs','Check My Links']},
+{n:85,c:'offpage',pr:'H',t:'Weak Digital PR Presence',p:'The brand received little media coverage or industry recognition with no PR campaigns.',f:'Created newsworthy content, expert commentary and outreach targeting journalists and publications.',imp:['Increased brand authority','High-authority backlinks','Better online visibility'],tools:['HARO (Connectively)','Quoted','Google News']},
+{n:86,c:'offpage',pr:'M',t:'No Social Media Promotion',p:'New content received minimal visibility because it was never promoted on social platforms.',f:'Shared content consistently across relevant social platforms to build visibility and engagement.',imp:['Higher content reach','Increased brand awareness','Potential backlink opportunities'],tools:['Buffer','LinkedIn','Facebook','X (Twitter)']},
+{n:87,c:'offpage',pr:'H',t:'Missing Business Directory Listings',p:'The business was absent from trusted industry directories, with no submission strategy.',f:'Submitted accurate business information to reputable niche and local directories.',imp:['Improved authority','Better local visibility','Increased trust signals'],tools:['BrightLocal','Whitespark']},
+{n:88,c:'offpage',pr:'M',t:'Low Brand Search Volume',p:'Very few users searched directly for the business name due to limited brand awareness.',f:'Improved brand visibility through content marketing, PR, local SEO and social campaigns.',imp:['Increased branded searches','Stronger trust signals','Better long-term rankings'],tools:['Google Trends','Search Console']},
+{n:89,c:'offpage',pr:'H',t:'No Competitor Outreach Analysis',p:'Backlink opportunities already earned by competitors were never pursued.',f:'Analysed competitor referring domains and built targeted outreach campaigns for similar sites.',imp:['Expanded backlink opportunities','Improved competitive positioning','Higher authority growth'],tools:['Ahrefs','SEMrush']},
+{n:90,c:'offpage',pr:'H',t:'No Link Performance Monitoring',p:'Existing backlinks were never tracked for gains or losses.',f:'Ran monthly backlink audits to monitor new, lost and toxic links while maintaining quality.',imp:['Protected link equity','Maintained healthy backlink profile','Improved long-term SEO performance'],tools:['Ahrefs','SEMrush','Search Console']},
+{n:91,c:'local',pr:'H',t:'Google Business Profile Not Claimed',p:'The business had no verified Google Business Profile, limiting Maps and local visibility.',f:'Claimed, verified and fully optimised the profile with accurate info, categories, photos and services.',imp:['Improved Google Maps visibility','Increased local rankings','More calls and direction requests'],tools:['Google Business Profile','Google Maps']},
+{n:92,c:'local',pr:'H',t:'Inconsistent NAP Information',p:'Business Name, Address and Phone were inconsistent across directories from outdated listings.',f:'Updated every citation to ensure 100% NAP consistency across all local platforms.',imp:['Improved local trust signals','Better citation consistency','Higher local rankings'],tools:['BrightLocal','Whitespark']},
+{n:93,c:'local',pr:'H',t:'Wrong Primary Business Category',p:'The Google Business Profile used an incorrect primary category, set without keyword research.',f:'Selected the most relevant primary category and added appropriate secondary categories.',imp:['Better local relevance','Improved visibility for target services','Higher map rankings'],tools:['Google Business Profile','Competitor Analysis']},
+{n:94,c:'local',pr:'H',t:'Incomplete Google Business Profile',p:'Hours, services, attributes and photos were missing from a partially completed profile.',f:'Completed every section \u2014 services, FAQs, service areas, hours and attributes.',imp:['Increased profile completeness','Better customer engagement','Improved local rankings'],tools:['Google Business Profile']},
+{n:95,c:'local',pr:'M',t:'Low-Quality Business Photos',p:'The profile held few or poor-quality images with no regular upload cadence.',f:'Uploaded high-quality photos of the business, team, work and branding.',imp:['Higher user engagement','Increased trust','Improved profile performance'],tools:['Google Business Profile','Canva']},
+{n:96,c:'local',pr:'H',t:'Insufficient Customer Reviews',p:'The business had very few Google reviews compared to competitors, with no request process.',f:'Implemented a review-generation strategy, requesting feedback after every completed job.',imp:['Improved credibility','Better local rankings','Higher conversion rates'],tools:['Google Business Profile','QR Review Link']},
+{n:97,c:'local',pr:'M',t:'No Review Responses',p:'Customer reviews were left unanswered with no management process in place.',f:'Responded professionally to every positive and negative review with personalised replies.',imp:['Increased customer trust','Better engagement','Stronger local SEO signals'],tools:['Google Business Profile']},
+{n:98,c:'local',pr:'H',t:'Missing Local Landing Pages',p:'Only one generic location page existed for a business serving many areas.',f:'Created unique, location-specific pages with original content, local keywords and FAQs.',imp:['Expanded local keyword coverage','Increased rankings across cities','More location-based leads'],tools:['Search Console','Ahrefs','WordPress']},
+{n:99,c:'local',pr:'H',t:'Weak Local Keyword Optimisation',p:'Pages targeted generic keywords instead of city-specific search terms.',f:'Optimised titles, headings, URLs and content with service + city keywords and nearby locations.',imp:['Improved local search visibility','Higher rankings for location searches','Increased qualified traffic'],tools:['Ahrefs','Google Keyword Planner','SEMrush']},
+{n:100,c:'local',pr:'H',t:'Missing LocalBusiness Schema',p:'The site lacked LocalBusiness structured data, making business details harder to parse.',f:'Added complete LocalBusiness schema with NAP, hours, service areas, geo-coordinates and profiles.',imp:['Enhanced local relevance','Better rich-result eligibility','Improved AI and search understanding'],tools:['Rank Math','Google Rich Results Test','Schema Validator']},
+{n:101,c:'local',pr:'H',t:'Missing Service Area Optimisation',p:'The business targeted only one city despite serving several nearby locations.',f:'Created optimised service-area pages, updated GBP service areas and added local internal links.',imp:['Expanded local visibility','Ranked in additional cities','Increased qualified local leads'],tools:['Google Business Profile','Ahrefs','Search Console']},
+{n:102,c:'local',pr:'H',t:'Weak Local Citations',p:'The business had very few citations on trusted local and industry directories.',f:'Built consistent citations on authoritative directories while maintaining accurate NAP.',imp:['Increased local authority','Improved Google Maps rankings','Stronger local trust signals'],tools:['BrightLocal','Whitespark','Google Business Profile']},
+{n:103,c:'local',pr:'H',t:'Duplicate Google Business Profiles',p:'Multiple profiles existed for the same location from listings created over time.',f:'Reported duplicates, merged listings where possible, and kept one fully optimised profile.',imp:['Eliminated ranking confusion','Improved local authority','Better customer experience'],tools:['Google Business Profile','Google Support']},
+{n:104,c:'local',pr:'M',t:'Incorrect Business Hours',p:'Business hours shown online were inaccurate, with seasonal and holiday hours never updated.',f:'Updated regular, holiday and special hours across the website and all listings.',imp:['Increased customer trust','Reduced negative reviews','Improved profile quality'],tools:['Google Business Profile']},
+{n:105,c:'local',pr:'H',t:'Missing Location-Specific Content',p:'Location pages reused the same generic content with little local relevance.',f:'Created unique content featuring local landmarks, neighbourhoods and city-specific services.',imp:['Improved local relevance','Better city-specific rankings','Reduced duplicate content'],tools:['Google Search','Google Maps','Ahrefs']},
+{n:106,c:'local',pr:'H',t:'No Local Backlinks',p:'The site lacked backlinks from local organisations, with no community outreach strategy.',f:'Earned backlinks through chambers of commerce, sponsorships, community events and local partnerships.',imp:['Increased local authority','Stronger geographic relevance','Improved local rankings'],tools:['Ahrefs','BrightLocal']},
+{n:107,c:'local',pr:'M',t:'No Google Business Posts',p:'The Google Business Profile was inactive with no regular updates or publishing schedule.',f:'Published weekly posts featuring services, offers, tips, seasonal updates and news.',imp:['Improved profile engagement','Increased customer interactions','Stronger local visibility'],tools:['Google Business Profile']},
+{n:108,c:'local',pr:'M',t:'Missing Google Business Q&A',p:'The profile\u2019s Q&A section went ignored and didn\u2019t answer common customer questions.',f:'Added and answered FAQs with clear, helpful, keyword-relevant responses.',imp:['Better customer experience','Increased trust','Enhanced local relevance'],tools:['Google Business Profile']},
+{n:109,c:'local',pr:'H',t:'Weak Local Internal Linking',p:'Location pages were isolated with no structured internal linking strategy.',f:'Linked city pages to related services, blogs, FAQs and nearby service areas with descriptive anchors.',imp:['Better crawlability','Improved local authority','Stronger location rankings'],tools:['Screaming Frog','Ahrefs']},
+{n:110,c:'local',pr:'H',t:'No Local SEO Performance Tracking',p:'The business never measured Maps rankings or local search performance.',f:'Tracked keyword rankings, GBP insights, calls, direction requests and conversions monthly.',imp:['Data-driven optimisation','Better ROI measurement','Continuous local SEO improvement'],tools:['GBP Insights','Search Console','GA4','BrightLocal']},
+{n:111,c:'advanced',pr:'H',t:'Content Not Optimised for AI Overviews',p:'Content lacked direct answers, entity optimisation and structured information, so it never surfaced in AI Overviews.',f:'Rewrote content with answer-first paragraphs, entity-rich context, summary boxes and structured headings.',imp:['Higher AI Overview visibility','Increased organic impressions','Better semantic relevance'],tools:['Google AI Overviews','Search Console','ChatGPT']},
+{n:112,c:'advanced',pr:'H',t:'No Answer Engine Optimisation (AEO)',p:'The site rarely appeared in answer engines or featured snippets, with content not directly answering user questions.',f:'Added concise 40\u201360 word answers, FAQs, step-by-step explanations and comparison tables aligned with intent.',imp:['Improved Featured Snippet opportunities','Better voice search visibility','Higher Answer Engine performance'],tools:['AnswerThePublic','AlsoAsked','Google Search']},
+{n:113,c:'advanced',pr:'H',t:'Weak Entity SEO',p:'Important entities \u2014 people, places, services, brands \u2014 were missing, with focus only on keywords.',f:'Integrated relevant entities naturally to strengthen topical context and knowledge-graph associations.',imp:['Better semantic SEO','Improved AI understanding','Increased topical authority'],tools:['InLinks','Google Knowledge Graph','Ahrefs']},
+{n:114,c:'advanced',pr:'H',t:'Poor Topical Authority',p:'The site covered isolated keywords instead of building comprehensive topical coverage.',f:'Built topic clusters with pillar pages, supporting articles, FAQs and strategic internal linking.',imp:['Higher topical authority','Better keyword coverage','Increased ranking potential'],tools:['Ahrefs','SEMrush','Search Console']},
+{n:115,c:'advanced',pr:'M',t:'Missing Conversational Content',p:'Content sounded robotic and focused on exact-match keywords instead of natural queries.',f:'Rewrote content using natural, conversational language that reflects how people actually ask questions.',imp:['Better AI interpretation','Improved user engagement','Stronger voice search performance'],tools:['ChatGPT','Google Search']},
+{n:116,c:'advanced',pr:'H',t:'No Multi-Intent Content Strategy',p:'Pages addressed only one type of search intent, ignoring informational, commercial and transactional needs.',f:'Expanded pages to satisfy multiple intents with education, pricing, FAQs, comparisons and clear CTAs.',imp:['Improved user satisfaction','Increased ranking opportunities','Better conversions'],tools:['Ahrefs','Google SERP Analysis']},
+{n:117,c:'advanced',pr:'H',t:'Weak E-E-A-T Signals',p:'The site lacked visible experience, expertise, authority and trust \u2014 no author profiles or trust elements.',f:'Added author bios, real-world experience, testimonials, credentials and transparent business information.',imp:['Stronger credibility','Better long-term rankings','Increased user trust'],tools:['Google Search Quality Evaluator Guidelines']},
+{n:118,c:'advanced',pr:'H',t:'Missing AI-Friendly Content Structure',p:'Large text blocks with no logical hierarchy made content hard for AI systems to extract and summarise.',f:'Used descriptive headings, short paragraphs, bullets, tables and summary sections for easier AI parsing.',imp:['Better AI comprehension','Increased citation potential','Improved readability'],tools:['ChatGPT','Claude','Perplexity']},
+{n:119,c:'advanced',pr:'H',t:'No Semantic Content Optimisation',p:'Content relied on exact-match keywords instead of full topic coverage, overlooking semantic relationships.',f:'Added related entities, synonyms, supporting concepts and contextually relevant terminology throughout.',imp:['Broader keyword relevance','Improved semantic coverage','Better rankings for related searches'],tools:['Google NLP concepts','InLinks','Ahrefs']},
+{n:120,c:'advanced',pr:'H',t:'No GEO Performance Monitoring',p:'The site tracked only traditional SEO metrics and ignored AI-driven visibility entirely.',f:'Set up monthly monitoring of AI Overview appearances, snippets, brand mentions and answer-engine visibility.',imp:['Measured AI search performance','Identified new optimisation opportunities','Improved GEO strategy'],tools:['Search Console','Ahrefs','SEMrush','AI Overview Tracking Tools']},
+{n:121,c:'advanced',pr:'H',t:'No FAQ Schema Markup',p:'FAQs were visible on the page but never marked up with structured data.',f:'Added valid FAQ schema to relevant service pages and blog posts where it matched visible content.',imp:['Improved search understanding','Increased eligibility for enhanced results','Better AI content extraction'],tools:['Rank Math','Google Rich Results Test','Schema Validator']},
+{n:122,c:'advanced',pr:'M',t:'Missing How-To Content',p:'The site had no step-by-step guides for common customer problems, focused only on service promotion.',f:'Created detailed how-to guides with clear steps, images, safety notes and professional recommendations.',imp:['Increased informational traffic','Improved topical authority','Better AI citation opportunities'],tools:['Google Search','Ahrefs','ChatGPT']},
+{n:123,c:'advanced',pr:'H',t:'Weak People Also Ask (PAA) Coverage',p:'Content never answered Google\u2019s People Also Ask questions \u2014 PAA research was missing from planning.',f:'Researched and incorporated PAA questions with concise, accurate answers throughout the content.',imp:['Expanded keyword coverage','Improved Featured Snippet potential','Better AEO performance'],tools:['Google Search','AlsoAsked','AnswerThePublic']},
+{n:124,c:'advanced',pr:'M',t:'No Comparison Tables',p:'Users had difficulty comparing services, products or solutions with no visual comparison elements.',f:'Added comparison tables highlighting features, pricing, benefits and ideal use cases.',imp:['Improved user engagement','Better commercial-intent coverage','Increased AI readability'],tools:['Google Docs','ChatGPT']},
+{n:125,c:'advanced',pr:'H',t:'Missing Cost & Pricing Content',p:'Users could not find pricing information before contacting the business \u2014 cost content was intentionally omitted.',f:'Added pricing guides, average cost ranges, influencing factors and transparent estimates with disclaimers.',imp:['Higher conversion rates','Better commercial search visibility','Increased user trust'],tools:['Competitor Research','Google Search','Ahrefs']},
+{n:126,c:'advanced',pr:'M',t:'No Expert Quotes or Insights',p:'Content leaned on general information only, with no expert opinions or practical insight.',f:'Added expert recommendations, practical tips and experience-based advice from trustworthy sources.',imp:['Stronger E-E-A-T','Increased credibility','Better engagement'],tools:['Industry Research','Google Search']},
+{n:127,c:'advanced',pr:'M',t:'Weak Content Freshness Signals',p:'Content grew outdated with no scheduled review, weakening freshness signals over time.',f:'Set a recurring review cycle to refresh statistics, examples and outdated references sitewide.',imp:['Stronger freshness signals','Sustained rankings','Increased trust'],tools:['Search Console','Ahrefs']}
+];
+
+const CATS = {
+  onpage:{label:'On-Page', color:'#2C7A66'},
+  technical:{label:'Technical', color:'#B54B36'},
+  offpage:{label:'Off-Page', color:'#CE8A2E'},
+  local:{label:'Local', color:'#3B6FA0'},
+  advanced:{label:'Advanced GEO/AEO', color:'#7A5AA8'}
+};
+const PR_COLOR = {H:'var(--rust)', M:'var(--amber)'};
+
+// hero counter
+const counterEl = document.getElementById('heroCount');
+let cur = 0;
+const target = DATA.length;
+const step = Math.max(1, Math.round(target/60));
+const timer = setInterval(()=>{
+  cur += step;
+  if(cur >= target){ cur = target; clearInterval(timer); }
+  counterEl.innerHTML = cur + '<small>/ ' + target + '</small>';
+}, 18);
+
+// category tally bars
+const tally = document.getElementById('catTally');
+Object.keys(CATS).forEach(k=>{
+  const count = DATA.filter(d=>d.c===k).length;
+  const pct = Math.round((count/DATA.length)*100);
+  const row = document.createElement('div');
+  row.className='cat-tally-row';
+  row.innerHTML = `<span>${CATS[k].label}</span><span class="cat-tally-bar"><i style="--w:${pct/100}; background:${CATS[k].color}"></i></span><span>${count}</span>`;
+  tally.appendChild(row);
+});
+
+// tabs
+const tabsEl = document.getElementById('tabs');
+let activeCat = 'all';
+function renderTabs(){
+  const allBtn = tabEl('all', `All ${DATA.length}`);
+  tabsEl.appendChild(allBtn);
+  Object.keys(CATS).forEach(k=>{
+    const count = DATA.filter(d=>d.c===k).length;
+    tabsEl.appendChild(tabEl(k, `${CATS[k].label} ${count}`));
+  });
+}
+function tabEl(key, label){
+  const b = document.createElement('button');
+  b.className = 'tab' + (key===activeCat?' active':'');
+  b.textContent = label;
+  b.onclick = ()=>{ activeCat = key; document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); b.classList.add('active'); render(); };
+  return b;
+}
+renderTabs();
+
+// search
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', render);
+
+const grid = document.getElementById('grid');
+const resultCount = document.getElementById('resultCount');
+
+function render(){
+  const q = searchInput.value.trim().toLowerCase();
+  let items = DATA.filter(d => activeCat==='all' || d.c===activeCat);
+  if(q){
+    items = items.filter(d =>
+      d.t.toLowerCase().includes(q) ||
+      d.p.toLowerCase().includes(q) ||
+      d.f.toLowerCase().includes(q) ||
+      d.tools.join(' ').toLowerCase().includes(q)
+    );
+  }
+  resultCount.textContent = `Showing ${items.length} of ${DATA.length} logged issues`;
+  grid.innerHTML = '';
+  if(items.length===0){
+    grid.innerHTML = `<div class="empty-state">No matching entries in the log — try a different term.</div>`;
+    return;
+  }
+  items.forEach(d=>{
+    const card = document.createElement('article');
+    card.className='ticket';
+    card.style.setProperty('--pr-color', PR_COLOR[d.pr] || CATS[d.c].color);
+    card.innerHTML = `
+      <div class="ticket-top">
+        <span class="ticket-id mono">ISSUE #${String(d.n).padStart(3,'0')} · ${CATS[d.c].label}</span>
+        <span class="pr-badge" style="--pr-color:${PR_COLOR[d.pr] || CATS[d.c].color}">${d.pr==='H'?'High priority':'Medium priority'}</span>
+      </div>
+      <h3>${d.t}</h3>
+      <div class="row"><span class="lbl">Problem</span>${d.p}</div>
+      <div class="row"><span class="lbl">Fix applied</span>${d.f}</div>
+      <ul class="impact-list">${d.imp.map(i=>`<li>${i}</li>`).join('')}</ul>
+      <div class="tools">${d.tools.map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+render();
+</script>
+</body>
+</html>
